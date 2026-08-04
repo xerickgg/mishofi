@@ -4,14 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>¡Feliz Cumpleaños! 🎂</title>
-    
+
     <!-- Vista previa para WhatsApp -->
     <meta property="og:title" content="¡Tengo una sorpresa para ti! 💖">
     <meta property="og:description" content="Haz clic para abrir tu tarjeta de cumpleaños musical.">
-    <meta property="og:image" content="https://unsplash.com">
 
-    <!-- Librería externa para el efecto de confeti profesional -->
-    <script src="https://jsdelivr.net"></script>
+    <!-- Librería para el efecto de confeti (URL correcta del archivo, no de la página principal) -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
     <style>
         * { box-sizing: border-box; }
@@ -40,8 +39,7 @@
         }
         h1 { font-size: 2.2rem; margin: 15px 0 10px 0; font-weight: bold; }
         p { font-size: 1.1rem; line-height: 1.5; opacity: 0.95; margin-bottom: 25px; }
-        
-        /* Contenedor y diseño del botón de corazón */
+
         .btn-container {
             position: relative;
             display: inline-block;
@@ -64,7 +62,6 @@
         .heart-btn:active {
             transform: scale(0.9);
         }
-        /* Dibujo del corazón con CSS puro */
         .heart-btn::before,
         .heart-btn::after {
             content: "";
@@ -84,7 +81,6 @@
             transform: rotate(45deg);
             transform-origin: 100% 100%;
         }
-        /* El número 18 sobre el corazón */
         .heart-number {
             position: relative;
             z-index: 2;
@@ -94,14 +90,13 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
             margin-top: -5px;
         }
-        
-        /* Animación de latido para el corazón */
+
         @keyframes pulse {
             0% { transform: scale(1); }
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
-        
+
         .instruccion {
             font-size: 0.9rem;
             opacity: 0.8;
@@ -115,7 +110,7 @@
     <div class="card">
         <h1>¡Feliz Cumpleaños! 🎂</h1>
         <p>Hoy celebras una edad mágica. Que la vida te llene de momentos tan divinos como tú. ¡A disfrutar al máximo!</p>
-        
+
         <div class="btn-container">
             <button class="heart-btn" id="magicButton">
                 <span class="heart-number">18</span>
@@ -124,9 +119,15 @@
         </div>
     </div>
 
-    <!-- Audio de "Mujer Divina" de Joe Cuba (Enlace optimizado para streaming) -->
+    <!--
+        IMPORTANTE:
+        Coloca tu archivo de audio "Mujer Divina" de Joe Cuba en la MISMA carpeta
+        que este HTML, con el nombre exacto "mujer-divina.mp3" (o cambia el
+        nombre en el atributo src de abajo). Debe ser un archivo que tú
+        ya tengas de forma legal (comprado o descargado legítimamente).
+    -->
     <audio id="bgMusic" loop>
-        <source src="https://archive.org" type="audio/mpeg">
+        <source src="mujer-divina.mp3" type="audio/mpeg">
         Tu navegador no soporta elementos de audio.
     </audio>
 
@@ -135,31 +136,29 @@
         const music = document.getElementById('bgMusic');
 
         button.addEventListener('click', () => {
-            // 1. Iniciar la música de Joe Cuba
+            // 1. Iniciar la música
             music.play().catch(error => {
                 console.log("Error al reproducir el audio: ", error);
             });
 
-            // 2. Disparar explosión inicial de confeti en el centro
+            // 2. Explosión inicial de confeti en el centro
             confetti({
                 particleCount: 150,
                 spread: 80,
                 origin: { y: 0.6 }
             });
 
-            // 3. Crear una lluvia continua de confeti durante 4 segundos
+            // 3. Lluvia continua de confeti durante 4 segundos
             const duration = 4 * 1000;
             const end = Date.now() + duration;
 
             (function frame() {
-                // Confeti desde el lado izquierdo
                 confetti({
                     particleCount: 3,
                     angle: 60,
                     spread: 55,
                     origin: { x: 0 }
                 });
-                // Confeti desde el lado derecho
                 confetti({
                     particleCount: 3,
                     angle: 120,
