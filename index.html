@@ -3,17 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¡Feliz Cumpleaños!</title>
+    <title>¡Feliz Cumpleaños! 🎂</title>
     
-    <!-- Configuración para la vista previa de WhatsApp -->
-    <meta property="og:title" content="¡Tengo un mensaje para ti! 🎂">
-    <meta property="og:description" content="Haz clic para abrir tu tarjeta de cumpleaños.">
-    <meta property="og:image" content="https://tusitio.com">
+    <!-- Vista previa para WhatsApp -->
+    <meta property="og:title" content="¡Tengo una sorpresa para ti! 💖">
+    <meta property="og:description" content="Haz clic para abrir tu tarjeta de cumpleaños musical.">
+    <meta property="og:image" content="https://unsplash.com">
+
+    <!-- Librería externa para el efecto de confeti profesional -->
+    <script src="https://jsdelivr.net"></script>
 
     <style>
+        * { box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #feb47b, #ff7e5f);
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
             margin: 0;
             height: 100vh;
             display: flex;
@@ -21,32 +25,154 @@
             align-items: center;
             text-align: center;
             color: white;
+            overflow: hidden;
         }
         .card {
-            background: rgba(255, 255, 255, 0.2);
-            padding: 30px;
-            border-radius: 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            max-width: 80%;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 35px 25px;
+            border-radius: 24px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            max-width: 90%;
+            width: 380px;
         }
-        h1 { font-size: 2.5rem; margin-bottom: 10px; }
-        p { font-size: 1.2rem; }
-        .cake { font-size: 4rem; animation: float 3s ease-in-out infinite; }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+        h1 { font-size: 2.2rem; margin: 15px 0 10px 0; font-weight: bold; }
+        p { font-size: 1.1rem; line-height: 1.5; opacity: 0.95; margin-bottom: 25px; }
+        
+        /* Contenedor y diseño del botón de corazón */
+        .btn-container {
+            position: relative;
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .heart-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            width: 100px;
+            height: 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: pulse 1.5s infinite;
+            transition: transform 0.3s ease;
+            outline: none;
+        }
+        .heart-btn:active {
+            transform: scale(0.9);
+        }
+        /* Dibujo del corazón con CSS puro */
+        .heart-btn::before,
+        .heart-btn::after {
+            content: "";
+            position: absolute;
+            top: 10px;
+            width: 52px;
+            height: 80px;
+            background: #ff3366;
+            border-radius: 50px 50px 0 0;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+            z-index: 1;
+            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
+        }
+        .heart-btn::after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+        /* El número 18 sobre el corazón */
+        .heart-number {
+            position: relative;
+            z-index: 2;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+            margin-top: -5px;
+        }
+        
+        /* Animación de latido para el corazón */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .instruccion {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            margin-top: 10px;
+            font-style: italic;
         }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <div class="cake">🎂</div>
-        <h1>¡Feliz Cumpleaños!</h1>
-        <p>Que este día esté lleno de risas, alegría y muchos pasteles. ¡Disfruta al máximo!</p>
+        <h1>¡Feliz Cumpleaños! 🎂</h1>
+        <p>Hoy celebras una edad mágica. Que la vida te llene de momentos tan divinos como tú. ¡A disfrutar al máximo!</p>
+        
+        <div class="btn-container">
+            <button class="heart-btn" id="magicButton">
+                <span class="heart-number">18</span>
+            </button>
+            <div class="instruccion">¡Presiona el corazón para tu sorpresa! ✨</div>
+        </div>
     </div>
+
+    <!-- Audio de "Mujer Divina" de Joe Cuba (Enlace optimizado para streaming) -->
+    <audio id="bgMusic" loop>
+        <source src="https://archive.org" type="audio/mpeg">
+        Tu navegador no soporta elementos de audio.
+    </audio>
+
+    <script>
+        const button = document.getElementById('magicButton');
+        const music = document.getElementById('bgMusic');
+
+        button.addEventListener('click', () => {
+            // 1. Iniciar la música de Joe Cuba
+            music.play().catch(error => {
+                console.log("Error al reproducir el audio: ", error);
+            });
+
+            // 2. Disparar explosión inicial de confeti en el centro
+            confetti({
+                particleCount: 150,
+                spread: 80,
+                origin: { y: 0.6 }
+            });
+
+            // 3. Crear una lluvia continua de confeti durante 4 segundos
+            const duration = 4 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                // Confeti desde el lado izquierdo
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 }
+                });
+                // Confeti desde el lado derecho
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 }
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
+        });
+    </script>
 
 </body>
 </html>
