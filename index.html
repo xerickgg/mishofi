@@ -9,42 +9,157 @@
     <meta property="og:title" content="¡Tengo una sorpresa para ti! 💖">
     <meta property="og:description" content="Haz clic para abrir tu tarjeta de cumpleaños musical.">
 
-    <!-- Librería para el efecto de confeti (URL correcta del archivo, no de la página principal) -->
+    <!-- Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Librería para el efecto de confeti -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
     <style>
+        :root {
+            --pink: #ff6b9d;
+            --hot-pink: #ff2e63;
+            --red: #e5383b;
+            --yellow: #ffd23f;
+            --cream: #fff8f0;
+            --deep: #6e1a35;
+        }
+
         * { box-sizing: border-box; }
+
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            font-family: 'Poppins', sans-serif;
+            background:
+                radial-gradient(circle at 50% 15%, rgba(255, 210, 63, 0.55), transparent 45%),
+                linear-gradient(160deg, #ff2e63 0%, #ff6b9d 45%, #ffb457 100%);
             margin: 0;
-            height: 100vh;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             text-align: center;
             color: white;
             overflow: hidden;
+            position: relative;
         }
+
+        /* ---------- Confeti ambiental de fondo ---------- */
+        .ambient-confetti {
+            position: absolute;
+            top: -40px;
+            opacity: 0.75;
+            animation: fall linear infinite;
+            z-index: 0;
+        }
+        .ambient-confetti.circle { border-radius: 50%; }
+        .ambient-confetti.tri {
+            width: 0; height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 12px solid var(--c, var(--yellow));
+            background: none !important;
+        }
+        @keyframes fall {
+            0%   { transform: translateY(-5vh) rotate(0deg); }
+            100% { transform: translateY(105vh) rotate(360deg); }
+        }
+
+        /* ---------- Banderín de papel picado ---------- */
+        .banderin {
+            position: absolute;
+            top: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(92vw, 460px);
+            height: 46px;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .banderin::before {
+            content: "";
+            position: absolute;
+            top: 6px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.6);
+        }
+        .flag {
+            position: absolute;
+            top: 6px;
+            width: 34px;
+            height: 40px;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            filter: drop-shadow(0 3px 4px rgba(0,0,0,0.15));
+        }
+
         .card {
-            background: rgba(255, 255, 255, 0.15);
-            padding: 35px 25px;
-            border-radius: 24px;
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.16);
+            padding: 60px 26px 34px 26px;
+            border-radius: 28px;
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            box-shadow: 0 20px 50px rgba(110, 26, 53, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.3);
             max-width: 90%;
             width: 380px;
+            position: relative;
+            z-index: 1;
         }
-        h1 { font-size: 2.2rem; margin: 15px 0 10px 0; font-weight: bold; }
-        p { font-size: 1.1rem; line-height: 1.5; opacity: 0.95; margin-bottom: 25px; }
+        .card::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: 28px;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--yellow), var(--pink), var(--red));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.8;
+        }
 
+        h1 {
+            font-family: 'Fredoka', sans-serif;
+            font-size: 2.1rem;
+            margin: 0 0 12px 0;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+            text-shadow: 0 3px 12px rgba(110, 26, 53, 0.35);
+        }
+        p {
+            font-size: 1.02rem;
+            line-height: 1.55;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+
+        /* ---------- Botón corazón ---------- */
         .btn-container {
             position: relative;
             display: inline-block;
-            margin-top: 10px;
+            margin-top: 6px;
         }
+        .glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 170px;
+            height: 170px;
+            transform: translate(-50%, -50%);
+            background: radial-gradient(circle, rgba(255, 210, 63, 0.65) 0%, rgba(255, 210, 63, 0) 70%);
+            border-radius: 50%;
+            animation: glow-pulse 2.2s ease-in-out infinite;
+            z-index: 0;
+        }
+        @keyframes glow-pulse {
+            0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(0.92); }
+            50%      { opacity: 1;    transform: translate(-50%, -50%) scale(1.08); }
+        }
+
         .heart-btn {
             background: none;
             border: none;
@@ -56,12 +171,13 @@
             justify-content: center;
             align-items: center;
             animation: pulse 1.5s infinite;
-            transition: transform 0.3s ease;
+            transition: transform 0.25s ease;
             outline: none;
+            z-index: 1;
         }
-        .heart-btn:active {
-            transform: scale(0.9);
-        }
+        .heart-btn:hover { transform: scale(1.06); }
+        .heart-btn:active { transform: scale(0.9); }
+
         .heart-btn::before,
         .heart-btn::after {
             content: "";
@@ -69,49 +185,76 @@
             top: 10px;
             width: 52px;
             height: 80px;
-            background: #ff3366;
+            background: linear-gradient(155deg, var(--red), var(--hot-pink));
             border-radius: 50px 50px 0 0;
             transform: rotate(-45deg);
             transform-origin: 0 100%;
             z-index: 1;
-            box-shadow: 0 4px 15px rgba(255, 51, 102, 0.4);
+            box-shadow: 0 6px 18px rgba(229, 56, 59, 0.5);
         }
         .heart-btn::after {
             left: 0;
             transform: rotate(45deg);
             transform-origin: 100% 100%;
         }
+
         .heart-number {
             position: relative;
             z-index: 2;
-            font-size: 1.8rem;
-            font-weight: bold;
-            color: white;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 1.9rem;
+            font-weight: 600;
+            color: var(--cream);
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
             margin-top: -5px;
         }
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
+            50% { transform: scale(1.08); }
             100% { transform: scale(1); }
         }
 
         .instruccion {
-            font-size: 0.9rem;
-            opacity: 0.8;
-            margin-top: 10px;
+            font-size: 0.88rem;
+            opacity: 0.85;
+            margin-top: 16px;
             font-style: italic;
+            color: var(--cream);
         }
     </style>
 </head>
 <body>
+
+    <!-- Confeti ambiental flotando de fondo -->
+    <div class="ambient-confetti circle" style="left:8%;  width:8px; height:8px; background:var(--yellow); animation-duration:9s;  animation-delay:0s;"></div>
+    <div class="ambient-confetti circle" style="left:18%; width:6px; height:6px; background:var(--pink);   animation-duration:11s; animation-delay:2s;"></div>
+    <div class="ambient-confetti tri"    style="left:28%; --c:var(--red);    animation-duration:8s;  animation-delay:1s;"></div>
+    <div class="ambient-confetti circle" style="left:72%; width:7px; height:7px; background:var(--yellow); animation-duration:10s; animation-delay:0.5s;"></div>
+    <div class="ambient-confetti tri"    style="left:84%; --c:var(--pink);   animation-duration:9.5s; animation-delay:3s;"></div>
+    <div class="ambient-confetti circle" style="left:92%; width:6px; height:6px; background:var(--red);    animation-duration:12s; animation-delay:1.5s;"></div>
+    <div class="ambient-confetti tri"    style="left:50%; --c:var(--yellow); animation-duration:10.5s; animation-delay:2.5s;"></div>
+    <div class="ambient-confetti circle" style="left:60%; width:5px; height:5px; background:var(--pink);   animation-duration:13s; animation-delay:0.8s;"></div>
+
+    <!-- Banderín de papel picado -->
+    <div class="banderin">
+        <div class="flag" style="left:0%;   background:var(--yellow);"></div>
+        <div class="flag" style="left:12%;  background:var(--pink);"></div>
+        <div class="flag" style="left:24%;  background:var(--red);"></div>
+        <div class="flag" style="left:36%;  background:var(--yellow);"></div>
+        <div class="flag" style="left:48%;  background:var(--pink);"></div>
+        <div class="flag" style="left:60%;  background:var(--red);"></div>
+        <div class="flag" style="left:72%;  background:var(--yellow);"></div>
+        <div class="flag" style="left:84%;  background:var(--pink);"></div>
+        <div class="flag" style="left:96%;  background:var(--red);"></div>
+    </div>
 
     <div class="card">
         <h1>¡Feliz Cumpleaños! 🎂</h1>
         <p>Hoy celebras una edad mágica. Que la vida te llene de momentos tan divinos como tú. ¡A disfrutar al máximo!</p>
 
         <div class="btn-container">
+            <div class="glow"></div>
             <button class="heart-btn" id="magicButton">
                 <span class="heart-number">18</span>
             </button>
@@ -135,35 +278,57 @@
         const button = document.getElementById('magicButton');
         const music = document.getElementById('bgMusic');
 
-        button.addEventListener('click', () => {
-            // 1. Iniciar la música
-            music.play().catch(error => {
-                console.log("Error al reproducir el audio: ", error);
-            });
+        const START_TIME = 57; // segundos (00:57) donde arranca la canción
 
-            // 2. Explosión inicial de confeti en el centro
+        function startMusicAt(seconds) {
+            const playFromHere = () => {
+                music.currentTime = seconds;
+                music.play().catch(error => {
+                    console.log("Error al reproducir el audio: ", error);
+                });
+            };
+
+            // Si el audio ya tiene metadata cargada (duración conocida), saltamos directo.
+            if (music.readyState >= 1) {
+                playFromHere();
+            } else {
+                // Si no, esperamos a que cargue la metadata antes de saltar al segundo 57.
+                music.addEventListener('loadedmetadata', playFromHere, { once: true });
+                music.load();
+            }
+        }
+
+        button.addEventListener('click', () => {
+            // 1. Iniciar la música desde el minuto 00:57
+            startMusicAt(START_TIME);
+
+            // 2. Explosión inicial de confeti en rosa, rojo y amarillo
             confetti({
                 particleCount: 150,
                 spread: 80,
-                origin: { y: 0.6 }
+                origin: { y: 0.6 },
+                colors: ['#ff6b9d', '#e5383b', '#ffd23f', '#ff2e63']
             });
 
             // 3. Lluvia continua de confeti durante 4 segundos
             const duration = 4 * 1000;
             const end = Date.now() + duration;
+            const colors = ['#ff6b9d', '#e5383b', '#ffd23f'];
 
             (function frame() {
                 confetti({
                     particleCount: 3,
                     angle: 60,
                     spread: 55,
-                    origin: { x: 0 }
+                    origin: { x: 0 },
+                    colors
                 });
                 confetti({
                     particleCount: 3,
                     angle: 120,
                     spread: 55,
-                    origin: { x: 1 }
+                    origin: { x: 1 },
+                    colors
                 });
 
                 if (Date.now() < end) {
