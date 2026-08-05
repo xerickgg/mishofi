@@ -51,7 +51,7 @@
             top: -40px;
             opacity: 0.75;
             animation: fall linear infinite;
-            z-index: 0;
+            z-index: 1;
         }
         .ambient-confetti.circle { border-radius: 50%; }
         .ambient-confetti.tri {
@@ -140,9 +140,33 @@
         /* ---------- Botón corazón ---------- */
         .btn-container {
             position: relative;
-            display: inline-block;
-            margin-top: 6px;
+            width: 150px;
+            height: 150px;
+            margin: 4px auto 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
+
+        /* Anillos de onda expansiva, perfectamente centrados en el contenedor */
+        .ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            border: 2px solid rgba(255, 210, 63, 0.55);
+            border-radius: 50%;
+            transform: translate(-50%, -50%) scale(0.85);
+            animation: ripple 3s ease-out infinite;
+            z-index: 0;
+        }
+        .ring.ring2 { animation-delay: 1.5s; border-color: rgba(255, 107, 157, 0.5); }
+        @keyframes ripple {
+            0%   { transform: translate(-50%, -50%) scale(0.8); opacity: 0.9; }
+            100% { transform: translate(-50%, -50%) scale(1.7); opacity: 0; }
+        }
+
         .glow {
             position: absolute;
             top: 50%;
@@ -160,6 +184,27 @@
             50%      { opacity: 1;    transform: translate(-50%, -50%) scale(1.08); }
         }
 
+        /* Estrellitas orbitando alrededor del corazón */
+        .orbit {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 130px;
+            height: 130px;
+            transform: translate(-50%, -50%);
+            animation: spin 16s linear infinite;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .spark {
+            position: absolute;
+            transform: translate(-50%, -50%);
+            color: var(--yellow);
+            font-size: 13px;
+            text-shadow: 0 0 6px rgba(255, 210, 63, 0.85);
+        }
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
         .heart-btn {
             background: none;
             border: none;
@@ -167,46 +212,50 @@
             position: relative;
             width: 100px;
             height: 100px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            animation: pulse 1.5s infinite;
+            padding: 0;
+            display: block;
+            animation: pulse 1.6s ease-in-out infinite;
             transition: transform 0.25s ease;
             outline: none;
-            z-index: 1;
+            z-index: 2;
         }
-        .heart-btn:hover { transform: scale(1.06); }
-        .heart-btn:active { transform: scale(0.9); }
+        .heart-btn:hover { transform: scale(1.07); }
+        .heart-btn:active { transform: scale(0.92); }
 
-        .heart-btn::before,
-        .heart-btn::after {
-            content: "";
+        /* Forma de corazón real y simétrica vía clip-path (ya no dos cuadrados rotados) */
+        .heart-shape {
             position: absolute;
-            top: 10px;
-            width: 52px;
-            height: 80px;
-            background: linear-gradient(155deg, var(--red), var(--hot-pink));
-            border-radius: 50px 50px 0 0;
-            transform: rotate(-45deg);
-            transform-origin: 0 100%;
-            z-index: 1;
-            box-shadow: 0 6px 18px rgba(229, 56, 59, 0.5);
+            inset: 0;
+            background: linear-gradient(155deg, var(--hot-pink) 0%, var(--red) 65%, #b3122f 100%);
+            clip-path: path('M50,30 C50,10 20,0 10,20 C0,40 15,55 50,85 C85,55 100,40 90,20 C80,0 50,10 50,30 Z');
+            box-shadow: 0 8px 22px rgba(229, 56, 59, 0.5);
         }
-        .heart-btn::after {
-            left: 0;
-            transform: rotate(45deg);
-            transform-origin: 100% 100%;
+        /* Brillo tipo vidrio sobre el corazón, para dar profundidad */
+        .heart-shine {
+            position: absolute;
+            top: 18px;
+            left: 24px;
+            width: 30px;
+            height: 18px;
+            background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.65), rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            transform: rotate(-20deg);
+            pointer-events: none;
         }
 
         .heart-number {
-            position: relative;
-            z-index: 2;
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding-top: 6px;
             font-family: 'Fredoka', sans-serif;
             font-size: 1.9rem;
             font-weight: 600;
             color: var(--cream);
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-            margin-top: -5px;
+            z-index: 3;
         }
 
         @keyframes pulse {
@@ -222,9 +271,245 @@
             font-style: italic;
             color: var(--cream);
         }
+
+        /* ---------- Globos que suben al presionar el botón ---------- */
+        .balloon {
+            position: fixed;
+            bottom: -160px;
+            width: 50px;
+            height: 62px;
+            border-radius: 50% 50% 50% 50% / 58% 58% 42% 42%;
+            z-index: 5;
+            cursor: pointer;
+            animation: rise linear forwards;
+            box-shadow:
+                inset -8px -10px 14px rgba(0,0,0,0.18),
+                inset 8px 10px 14px rgba(255,255,255,0.35),
+                0 6px 14px rgba(0,0,0,0.15);
+        }
+        .balloon.popping {
+            transition: transform 0.18s ease, opacity 0.18s ease;
+            transform: scale(1.35);
+            opacity: 0;
+        }
+        .b-shine {
+            position: absolute;
+            top: 11px;
+            left: 12px;
+            width: 14px;
+            height: 20px;
+            background: rgba(255, 255, 255, 0.55);
+            border-radius: 50%;
+            filter: blur(1.5px);
+            transform: rotate(-18deg);
+        }
+        .b-knot {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            transform: translateX(-50%);
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            filter: brightness(0.85);
+        }
+        .b-string {
+            position: absolute;
+            top: calc(100% + 7px);
+            left: 50%;
+            width: 1px;
+            height: 58px;
+            background: rgba(255, 255, 255, 0.5);
+        }
+        @keyframes rise {
+            0%   { transform: translateY(0) translateX(0) rotate(-4deg); opacity: 1; }
+            25%  { transform: translateY(calc(var(--rise) * 0.25)) translateX(18px) rotate(4deg); }
+            50%  { transform: translateY(calc(var(--rise) * 0.55)) translateX(-16px) rotate(-4deg); }
+            75%  { transform: translateY(calc(var(--rise) * 0.85)) translateX(14px) rotate(3deg); }
+            100% { transform: translateY(var(--rise)) translateX(0) rotate(0deg); opacity: 1; }
+        }
+        @keyframes bob {
+            0%, 100% { transform: translateY(var(--rise)) translateX(0) rotate(-2deg); }
+            50%      { transform: translateY(calc(var(--rise) - 10px)) translateX(5px) rotate(2deg); }
+        }
+
+        /* ---------- Lirios decorativos de fondo ---------- */
+        .lilies {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .lily-cluster {
+            position: absolute;
+            filter: drop-shadow(0 8px 16px rgba(110, 26, 53, 0.25));
+        }
+        .lily-cluster .petal {
+            stroke: rgba(255, 255, 255, 0.4);
+            stroke-width: 0.6;
+            filter: drop-shadow(0 1.5px 2px rgba(110, 26, 53, 0.2));
+        }
+        .lily-cluster .innerTepal {
+            filter: brightness(0.9) drop-shadow(0 1px 1.5px rgba(110, 26, 53, 0.18));
+        }
+        .lily-cluster .stamens path {
+            stroke: #8a4a1c;
+        }
+        .lily-cluster .anther {
+            fill: url(#antherGrad);
+        }
+        .lily-cluster .core {
+            fill: #ffedb8;
+        }
+        .lily-cluster .vein {
+            stroke: rgba(255, 255, 255, 0.6);
+        }
+        .lily-cluster .streak {
+            stroke: rgba(110, 26, 53, 0.28);
+        }
+        .lily-cluster .pistil {
+            stroke: #eef7d6;
+        }
+        .lily-cluster .stigma {
+            fill: #c98a4b;
+        }
+        .lily-cluster .leaf {
+            fill: url(#leafGrad);
+            stroke: rgba(0, 0, 0, 0.1);
+            stroke-width: 0.5;
+        }
     </style>
 </head>
 <body>
+
+    <!-- Lirios decorativos de fondo -->
+    <svg width="0" height="0" style="position:absolute">
+        <defs>
+            <radialGradient id="petalPink" cx="35%" cy="12%" r="95%">
+                <stop offset="0%" stop-color="#fff5f8"/>
+                <stop offset="30%" stop-color="#ffc3d9"/>
+                <stop offset="65%" stop-color="#ff8fb3"/>
+                <stop offset="100%" stop-color="#d42b63"/>
+            </radialGradient>
+            <radialGradient id="petalYellow" cx="35%" cy="12%" r="95%">
+                <stop offset="0%" stop-color="#fffdf0"/>
+                <stop offset="30%" stop-color="#ffe487"/>
+                <stop offset="65%" stop-color="#ffd23f"/>
+                <stop offset="100%" stop-color="#dc9700"/>
+            </radialGradient>
+            <linearGradient id="stemGrad" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#7fbf6b"/>
+                <stop offset="100%" stop-color="#3f8a45"/>
+            </linearGradient>
+            <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stop-color="#9be08f"/>
+                <stop offset="100%" stop-color="#2f6b34"/>
+            </linearGradient>
+
+            <radialGradient id="antherGrad" cx="35%" cy="30%" r="75%">
+                <stop offset="0%" stop-color="#d9995e"/>
+                <stop offset="100%" stop-color="#6b3a12"/>
+            </radialGradient>
+
+            <!-- Lirio: tépalos exteriores anchos + interiores angostos (anatomía real), vetas, pistilo -->
+            <symbol id="lilyFlower" viewBox="-72 -84 144 168">
+                <!-- 3 tépalos exteriores, más anchos y largos -->
+                <g id="tepalOuter">
+                    <path class="petal outerTepal" d="M0,-6 C-13,-19 -15,-38 -12,-55 C-10,-68 -5,-77 0,-82 C5,-77 10,-68 12,-55 C15,-38 13,-19 0,-6 Z"/>
+                    <path class="vein" d="M0,-11 C-1.5,-34 -1.5,-58 0,-78" fill="none" stroke-width="0.9"/>
+                    <path class="streak" d="M-4,-16 C-5,-27 -4,-38 -2,-47" fill="none" stroke-width="0.6"/>
+                    <path class="streak" d="M4,-16 C5,-27 4,-38 2,-47" fill="none" stroke-width="0.6"/>
+                </g>
+                <use href="#tepalOuter" transform="rotate(120)"/>
+                <use href="#tepalOuter" transform="rotate(240)"/>
+
+                <!-- 3 tépalos interiores, un poco más angostos y cortos, alternados -->
+                <g id="tepalInner">
+                    <path class="petal innerTepal" d="M0,-6 C-9,-17 -10,-32 -8,-46 C-7,-56 -3,-63 0,-67 C3,-63 7,-56 8,-46 C10,-32 9,-17 0,-6 Z"/>
+                    <path class="vein" d="M0,-10 C-1,-30 -1,-50 0,-64" fill="none" stroke-width="0.8"/>
+                </g>
+                <use href="#tepalInner" transform="rotate(60)"/>
+                <use href="#tepalInner" transform="rotate(180)"/>
+                <use href="#tepalInner" transform="rotate(300)"/>
+
+                <!-- Estambres curvos con anteras -->
+                <g class="stamens" stroke-linecap="round" fill="none">
+                    <path d="M0,0 C6,-10 14,-16 22,-26" stroke-width="1.6"/>
+                    <path d="M0,0 C10,-4 20,-6 30,-12" stroke-width="1.6"/>
+                    <path d="M0,0 C10,4 20,8 27,16" stroke-width="1.6"/>
+                    <path d="M0,0 C2,10 4,20 3,30" stroke-width="1.6"/>
+                    <path d="M0,0 C-8,6 -16,12 -22,22" stroke-width="1.6"/>
+                    <path d="M0,0 C-10,-2 -19,-4 -27,-10" stroke-width="1.6"/>
+                </g>
+                <ellipse class="anther" cx="22" cy="-26" rx="3.6" ry="2.2" transform="rotate(-49 22 -26)"/>
+                <ellipse class="anther" cx="30" cy="-12" rx="3.6" ry="2.2" transform="rotate(-20 30 -12)"/>
+                <ellipse class="anther" cx="27" cy="16"  rx="3.6" ry="2.2" transform="rotate(30 27 16)"/>
+                <ellipse class="anther" cx="3"  cy="30"  rx="3.6" ry="2.2" transform="rotate(80 3 30)"/>
+                <ellipse class="anther" cx="-22" cy="22" rx="3.6" ry="2.2" transform="rotate(-45 -22 22)"/>
+                <ellipse class="anther" cx="-27" cy="-10" rx="3.6" ry="2.2" transform="rotate(12 -27 -10)"/>
+
+                <!-- Pistilo central con estigma -->
+                <path class="pistil" d="M0,0 L0,-32" stroke-width="2" stroke-linecap="round"/>
+                <circle class="stigma" cx="0" cy="-32" r="2.4"/>
+                <circle cx="0" cy="0" r="4" class="core"/>
+            </symbol>
+
+            <!-- Hoja simple con vena -->
+            <symbol id="leafShape" viewBox="-20 -9 40 18">
+                <path class="leaf" d="M-18,0 C-10,-11 10,-11 18,0 C10,11 -10,11 -18,0 Z"/>
+                <path d="M-15,0 L15,0" stroke="#2f6b34" stroke-width="0.8" opacity="0.55"/>
+            </symbol>
+        </defs>
+    </svg>
+
+    <div class="lilies">
+        <!-- Ramillete inferior izquierdo: lirios rosas y amarillos + hojas -->
+        <svg class="lily-cluster" style="left:-35px; bottom:-40px; width:250px; height:250px;" viewBox="0 0 300 300">
+            <path d="M60,300 C55,220 70,160 95,110" stroke="url(#stemGrad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path d="M215,300 C205,225 195,175 165,130" stroke="url(#stemGrad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path d="M130,300 C128,235 129,185 130,152" stroke="url(#stemGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <use href="#leafShape" x="72" y="205" width="34" height="16" transform="rotate(-40 72 205)"/>
+            <use href="#leafShape" x="185" y="220" width="30" height="14" transform="rotate(35 185 220)"/>
+            <use href="#leafShape" x="122" y="230" width="24" height="11" transform="rotate(-20 122 230)"/>
+            <use href="#lilyFlower" x="95"  y="80"  width="150" height="150" fill="url(#petalPink)" style="--stroke:#c2185b" transform="rotate(-12 95 80)"/>
+            <use href="#lilyFlower" x="165" y="100" width="140" height="140" fill="url(#petalYellow)" style="--stroke:#b8860b" transform="rotate(20 165 100)"/>
+            <use href="#lilyFlower" x="130" y="135" width="110" height="110" fill="url(#petalYellow)" style="--stroke:#b8860b" transform="rotate(-8 130 135)"/>
+        </svg>
+
+        <!-- Ramillete inferior derecho: lirios rosas y amarillos + hojas -->
+        <svg class="lily-cluster" style="right:-40px; bottom:-45px; width:240px; height:240px;" viewBox="0 0 300 300">
+            <path d="M230,300 C238,220 220,160 190,115" stroke="url(#stemGrad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path d="M90,300 C100,225 112,178 120,125" stroke="url(#stemGrad)" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <path d="M155,300 C153,235 154,185 155,157" stroke="url(#stemGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <use href="#leafShape" x="205" y="210" width="32" height="15" transform="rotate(40 205 210)"/>
+            <use href="#leafShape" x="115" y="225" width="28" height="13" transform="rotate(-35 115 225)"/>
+            <use href="#leafShape" x="150" y="235" width="22" height="10" transform="rotate(20 150 235)"/>
+            <use href="#lilyFlower" x="190" y="85"  width="145" height="145" fill="url(#petalYellow)" style="--stroke:#b8860b" transform="rotate(14 190 85)"/>
+            <use href="#lilyFlower" x="120" y="95"  width="135" height="135" fill="url(#petalPink)" style="--stroke:#c2185b" transform="rotate(-18 120 95)"/>
+            <use href="#lilyFlower" x="155" y="125" width="110" height="110" fill="url(#petalPink)" style="--stroke:#c2185b" transform="rotate(10 155 125)"/>
+        </svg>
+
+        <!-- Ramillete superior izquierdo, detrás del banderín -->
+        <svg class="lily-cluster" style="left:4%; top:-45px; width:150px; height:150px; opacity:0.9;" viewBox="0 0 300 300">
+            <path d="M140,300 C138,225 142,165 150,112" stroke="url(#stemGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M195,300 C193,230 194,185 195,148" stroke="url(#stemGrad)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <use href="#leafShape" x="142" y="205" width="26" height="12" transform="rotate(-32 142 205)"/>
+            <use href="#leafShape" x="193" y="235" width="22" height="10" transform="rotate(28 193 235)"/>
+            <use href="#lilyFlower" x="150" y="95" width="115" height="115" fill="url(#petalPink)" style="--stroke:#c2185b" transform="rotate(-10 150 95)"/>
+            <use href="#lilyFlower" x="195" y="130" width="80" height="80" fill="url(#petalYellow)" style="--stroke:#b8860b" transform="rotate(12 195 130)"/>
+        </svg>
+
+        <!-- Ramillete superior derecho, detrás del banderín -->
+        <svg class="lily-cluster" style="right:6%; top:-40px; width:150px; height:150px; opacity:0.9;" viewBox="0 0 300 300">
+            <path d="M160,300 C162,225 158,165 150,108" stroke="url(#stemGrad)" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M105,300 C107,230 106,185 105,143" stroke="url(#stemGrad)" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            <use href="#leafShape" x="158" y="205" width="26" height="12" transform="rotate(32 158 205)"/>
+            <use href="#leafShape" x="107" y="235" width="22" height="10" transform="rotate(-28 107 235)"/>
+            <use href="#lilyFlower" x="150" y="90" width="120" height="120" fill="url(#petalPink)" style="--stroke:#c2185b" transform="rotate(8 150 90)"/>
+            <use href="#lilyFlower" x="105" y="130" width="80" height="80" fill="url(#petalYellow)" style="--stroke:#b8860b" transform="rotate(-12 105 130)"/>
+        </svg>
+    </div>
 
     <!-- Confeti ambiental flotando de fondo -->
     <div class="ambient-confetti circle" style="left:8%;  width:8px; height:8px; background:var(--yellow); animation-duration:9s;  animation-delay:0s;"></div>
@@ -254,12 +539,22 @@
         <p>Hoy celebras una edad mágica. Que la vida te llene de momentos tan divinos como tú. ¡A disfrutar al máximo!</p>
 
         <div class="btn-container">
+            <div class="ring"></div>
+            <div class="ring ring2"></div>
             <div class="glow"></div>
+            <div class="orbit">
+                <span class="spark" style="top:0%;   left:50%;">✦</span>
+                <span class="spark" style="top:50%;  left:100%;">✧</span>
+                <span class="spark" style="top:100%; left:50%;">✦</span>
+                <span class="spark" style="top:50%;  left:0%;">✧</span>
+            </div>
             <button class="heart-btn" id="magicButton">
+                <div class="heart-shape"></div>
+                <div class="heart-shine"></div>
                 <span class="heart-number">18</span>
             </button>
-            <div class="instruccion">¡Presiona el corazón para tu sorpresa! ✨</div>
         </div>
+        <div class="instruccion">¡Presiona el corazón para tu sorpresa! ✨</div>
     </div>
 
     <!--
@@ -298,11 +593,83 @@
             }
         }
 
+        function popBalloon(balloon, colorForConfetti) {
+            if (balloon.classList.contains('popping')) return;
+            balloon.classList.add('popping');
+
+            const rect = balloon.getBoundingClientRect();
+            confetti({
+                particleCount: 26,
+                spread: 65,
+                startVelocity: 22,
+                scalar: 0.55,
+                origin: {
+                    x: (rect.left + rect.width / 2) / window.innerWidth,
+                    y: (rect.top + rect.height / 2) / window.innerHeight
+                },
+                colors: [colorForConfetti, '#ffd23f', '#ffffff']
+            });
+
+            setTimeout(() => balloon.remove(), 200);
+        }
+
+        function launchBalloons() {
+            const colors = ['#ff6b9d', '#e5383b', '#ffd23f', '#ff2e63', '#ffb457', '#ff8fb3'];
+            const count = 18;
+
+            for (let i = 0; i < count; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                const color = colors[i % colors.length];
+                balloon.style.left = `${2 + Math.random() * 94}%`;
+                balloon.style.background =
+                    `radial-gradient(circle at 32% 26%, #ffffff 0%, ${color} 45%, ${color} 100%)`;
+                const size = 0.75 + Math.random() * 0.6;
+
+                // Calcula cuánto debe subir para quedar flotando justo debajo del borde superior
+                const restTop = 20 + Math.random() * 90; // separación del borde superior, en px
+                const riseDistance = window.innerHeight + 160 - restTop;
+
+                balloon.style.setProperty('--rise', `-${riseDistance}px`);
+                balloon.style.transform = `scale(${size})`;
+
+                const duration = 4.5 + Math.random() * 2;
+                balloon.style.animationDuration = `${duration}s`;
+                balloon.style.animationDelay = `${Math.random() * 0.9}s`;
+
+                const knot = document.createElement('div');
+                knot.className = 'b-knot';
+                knot.style.background = color;
+
+                const shine = document.createElement('div');
+                shine.className = 'b-shine';
+
+                const string = document.createElement('div');
+                string.className = 'b-string';
+
+                balloon.appendChild(shine);
+                balloon.appendChild(knot);
+                balloon.appendChild(string);
+                document.body.appendChild(balloon);
+
+                // Cuando termina de subir, pasa a flotar suavemente en su lugar
+                balloon.addEventListener('animationend', () => {
+                    balloon.style.animation = `bob ${3 + Math.random() * 1.5}s ease-in-out infinite`;
+                }, { once: true });
+
+                // Solo desaparece si el usuario le da clic (explota con mini confeti)
+                balloon.addEventListener('click', () => popBalloon(balloon, color));
+            }
+        }
+
         button.addEventListener('click', () => {
             // 1. Iniciar la música desde el minuto 00:57
             startMusicAt(START_TIME);
 
-            // 2. Explosión inicial de confeti en rosa, rojo y amarillo
+            // 2. Lanzar los globos subiendo
+            launchBalloons();
+
+            // 3. Explosión inicial de confeti en rosa, rojo y amarillo
             confetti({
                 particleCount: 150,
                 spread: 80,
@@ -310,7 +677,7 @@
                 colors: ['#ff6b9d', '#e5383b', '#ffd23f', '#ff2e63']
             });
 
-            // 3. Lluvia continua de confeti durante 4 segundos
+            // 4. Lluvia continua de confeti durante 4 segundos
             const duration = 4 * 1000;
             const end = Date.now() + duration;
             const colors = ['#ff6b9d', '#e5383b', '#ffd23f'];
