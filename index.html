@@ -1,751 +1,977 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¡Feliz Cumpleaños! 🎂</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Feliz Cumpleaños! 🎂</title>
 
-    <!-- Vista previa para WhatsApp -->
-    <meta property="og:title" content="¡Tengo una sorpresa para ti! 💖">
-    <meta property="og:description" content="Haz clic para abrir tu álbum de cumpleaños musical.">
+    <!-- Vista previa para WhatsApp -->
+    <meta property="og:title" content="¡Tengo una sorpresa para ti! 💖">
+    <meta property="og:description" content="Haz clic para abrir tu álbum de cumpleaños musical.">
 
-    <!-- Tipografías -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Indie+Flower&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Tipografías -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Indie+Flower&family=Poppins:wght@400;500&display=swap" rel="stylesheet">
 
-    <!-- Librería para el efecto de confeti y fuegos artificiales -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+    <!-- Librería para el efecto de confeti y fuegos artificiales -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 
-    <style>
-        :root {
-            --pink: #ff6584;
-            --hot-pink: #ff2a6d;
-            --red: #e63946;
-            --yellow: #ffca3a;
-            --coral: #ff758f;
-            --cream: #fff9f5;
-            
-            /* Ancho dinámico para las páginas */
-            --page-w: min(47vw, 380px);
-            --book-w: calc(var(--page-w) * 2);
-        }
+    <style>
+        :root {
+            --pink: #ff6584;
+            --hot-pink: #ff2a6d;
+            --red: #e63946;
+            --yellow: #ffca3a;
+            --coral: #ff758f;
+            --cream: #fff9f5;
+            
+            /* Ancho dinámico para las páginas */
+            --page-w: min(47vw, 380px);
+            --book-w: calc(var(--page-w) * 2);
+        }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background: linear-gradient(160deg, #7c1f43 0%, #a62a5b 48%, #52132b 100%);
-            margin: 0;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            color: white;
-            overflow: hidden;
-            position: relative;
-            transition: background 1.5s ease;
-        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(160deg, #7c1f43 0%, #a62a5b 48%, #52132b 100%);
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            overflow: hidden;
+            position: relative;
+            transition: background 1.5s ease;
+        }
 
-        /* ---------- Elementos Celestes (Sol y Estrellas) ---------- */
-        .sky-element {
-            position: fixed;
-            pointer-events: none;
-            z-index: 0;
-            transition: opacity 1.5s ease, transform 1.5s ease;
-        }
+        /* ---------- Elementos Celestes (Sol y Estrellas) ---------- */
+        .sky-element {
+            position: fixed;
+            pointer-events: none;
+            z-index: 0;
+            transition: opacity 1.5s ease, transform 1.5s ease;
+        }
 
-        /* Sol dinámico */
-        #sun {
-            top: -60px;
-            right: -60px;
-            width: 180px;
-            height: 180px;
-            background: radial-gradient(circle, #fff7ad 0%, #ffca3a 50%, rgba(255, 170, 0, 0) 70%);
-            border-radius: 50%;
-            filter: blur(10px);
-            box-shadow: 0 0 60px rgba(255, 202, 58, 0.6);
-        }
+        /* Sol dinámico */
+        #sun {
+            top: -60px;
+            right: -60px;
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle, #fff7ad 0%, #ffca3a 50%, rgba(255, 170, 0, 0) 70%);
+            border-radius: 50%;
+            filter: blur(10px);
+            box-shadow: 0 0 60px rgba(255, 202, 58, 0.6);
+        }
 
-        /* Rayos de sol */
-        .sun-ray {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 350px;
-            height: 350px;
-            background: conic-gradient(from 180deg at 0% 0%, rgba(255,255,255,0.18) 0deg, transparent 30deg, rgba(255,240,160,0.12) 60deg, transparent 90deg);
-            pointer-events: none;
-            z-index: 0;
-            transform-origin: top right;
-            animation: rotateRay 25s linear infinite;
-            transition: opacity 1.5s ease;
-        }
-        @keyframes rotateRay {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
+        /* Rayos de sol */
+        .sun-ray {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 350px;
+            height: 350px;
+            background: conic-gradient(from 180deg at 0% 0%, rgba(255,255,255,0.18) 0deg, transparent 30deg, rgba(255,240,160,0.12) 60deg, transparent 90deg);
+            pointer-events: none;
+            z-index: 0;
+            transform-origin: top right;
+            animation: rotateRay 25s linear infinite;
+            transition: opacity 1.5s ease;
+        }
+        @keyframes rotateRay {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
 
-        /* Estrellas estáticas en la madrugada */
-        .star {
-            position: fixed;
-            background: white;
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: 0;
-            animation: twinkle 2s ease-in-out infinite alternate;
-            transition: opacity 1.5s ease;
-        }
-        @keyframes twinkle {
-            0% { transform: scale(0.8); opacity: 0.3; }
-            100% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 4px white); }
-        }
+        /* Estrellas estáticas en la madrugada */
+        .star {
+            position: fixed;
+            background: white;
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 0;
+            animation: twinkle 2s ease-in-out infinite alternate;
+            transition: opacity 1.5s ease;
+        }
+        @keyframes twinkle {
+            0% { transform: scale(0.8); opacity: 0.3; }
+            100% { transform: scale(1.2); opacity: 1; filter: drop-shadow(0 0 4px white); }
+        }
 
-        /* Estrella fugaz (cada ~18 segundos) */
-        .shooting-star {
-            position: fixed;
-            top: -50px;
-            left: -50px;
-            width: 100px;
-            height: 2px;
-            background: linear-gradient(90deg, white, rgba(255,255,255,0));
-            transform: rotate(-45deg);
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0;
-        }
-        @keyframes shoot {
-            0% { transform: translate(0, 0) rotate(-45deg); opacity: 1; }
-            100% { transform: translate(110vw, 110vh) rotate(-45deg); opacity: 0; }
-        }
+        /* Estrella fugaz (cada ~18 segundos) */
+        .shooting-star {
+            position: fixed;
+            top: -50px;
+            left: -50px;
+            width: 100px;
+            height: 2px;
+            background: linear-gradient(90deg, white, rgba(255,255,255,0));
+            transform: rotate(-45deg);
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0;
+        }
+        @keyframes shoot {
+            0% { transform: translate(0, 0) rotate(-45deg); opacity: 1; }
+            100% { transform: translate(110vw, 110vh) rotate(-45deg); opacity: 0; }
+        }
 
-        /* ---------- Fondo tipo "mesh gradient" ---------- */
-        .bg-blob {
-            position: fixed;
-            border-radius: 50%;
-            filter: blur(70px);
-            z-index: 0;
-            pointer-events: none;
-            animation: drift ease-in-out infinite alternate;
-            transition: background 1.5s ease;
-        }
-        @keyframes drift {
-            0%   { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(26px, -22px) scale(1.1); }
-        }
+        /* ---------- Fondo tipo "mesh gradient" ---------- */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(70px);
+            z-index: 0;
+            pointer-events: none;
+            animation: drift ease-in-out infinite alternate;
+            transition: background 1.5s ease;
+        }
+        @keyframes drift {
+            0%   { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(26px, -22px) scale(1.1); }
+        }
 
-        /* ---------- Confeti ambiental de fondo ---------- */
-        .ambient-confetti {
-            position: absolute;
-            top: -40px;
-            opacity: 0.75;
-            animation: fall linear infinite;
-            z-index: 1;
-        }
-        .ambient-confetti.circle { border-radius: 50%; }
-        .ambient-confetti.tri {
-            width: 0; height: 0;
-            border-left: 7px solid transparent;
-            border-right: 7px solid transparent;
-            border-bottom: 12px solid var(--c, var(--yellow));
-            background: none !important;
-        }
-        @keyframes fall {
-            0%   { transform: translateY(-5vh) rotate(0deg); }
-            100% { transform: translateY(105vh) rotate(360deg); }
-        }
+        /* ---------- Confeti ambiental de fondo ---------- */
+        .ambient-confetti {
+            position: absolute;
+            top: -40px;
+            opacity: 0.75;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+        .ambient-confetti.circle { border-radius: 50%; }
+        .ambient-confetti.tri {
+            width: 0; height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-bottom: 12px solid var(--c, var(--yellow));
+            background: none !important;
+        }
+        @keyframes fall {
+            0%   { transform: translateY(-5vh) rotate(0deg); }
+            100% { transform: translateY(105vh) rotate(360deg); }
+        }
 
-        /* ---------- Banderín de papel picado ---------- */
-        .banderin {
-            position: absolute;
-            top: 22px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: min(92vw, 460px);
-            height: 46px;
-            z-index: 3;
-            pointer-events: none;
-        }
-        .banderin::before {
-            content: "";
-            position: absolute;
-            top: 6px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.65);
-        }
-        .flag {
-            position: absolute;
-            top: 6px;
-            width: 34px;
-            height: 40px;
-            clip-path: polygon(0 0, 100% 0, 50% 100%);
-            filter: drop-shadow(0 3px 4px rgba(0,0,0,0.15));
-        }
+        /* ---------- Banderín de papel picado ---------- */
+        .banderin {
+            position: absolute;
+            top: 22px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(92vw, 460px);
+            height: 46px;
+            z-index: 3;
+            pointer-events: none;
+        }
+        .banderin::before {
+            content: "";
+            position: absolute;
+            top: 6px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.65);
+        }
+        .flag {
+            position: absolute;
+            top: 6px;
+            width: 34px;
+            height: 40px;
+            clip-path: polygon(0 0, 100% 0, 50% 100%);
+            filter: drop-shadow(0 3px 4px rgba(0,0,0,0.15));
+        }
 
-        /* ---------- Layout principal del Álbum ---------- */
-        .album-shell {
-            position: relative;
-            z-index: 2;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 16px;
-            padding-top: 26px;
-        }
-        .carousel-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .nav-btn {
-            flex: 0 0 auto;
-            width: 42px;
-            height: 42px;
-            border-radius: 50%;
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            background: rgba(255, 255, 255, 0.18);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            color: white;
-            font-size: 1.3rem;
-            line-height: 1;
-            cursor: pointer;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
-            z-index: 10;
-        }
-        .nav-btn.visible {
-            display: flex;
-            animation: fadeInBtn 0.5s ease forwards;
-        }
-        @keyframes fadeInBtn {
-            from { opacity: 0; transform: scale(0.6); }
-            to { opacity: 1; transform: scale(1); }
-        }
+        /* ---------- Layout principal del Álbum ---------- */
+        .album-shell {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding-top: 26px;
+        }
+        .carousel-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .nav-btn {
+            flex: 0 0 auto;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            color: white;
+            font-size: 1.3rem;
+            line-height: 1;
+            cursor: pointer;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease, background 0.2s ease, opacity 0.2s ease;
+            z-index: 10;
+        }
+        .nav-btn.visible {
+            display: flex;
+            animation: fadeInBtn 0.5s ease forwards;
+        }
+        @keyframes fadeInBtn {
+            from { opacity: 0; transform: scale(0.6); }
+            to { opacity: 1; transform: scale(1); }
+        }
 
-        .nav-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.32); transform: scale(1.08); }
-        .nav-btn:active:not(:disabled) { transform: scale(0.92); }
-        .nav-btn:disabled { opacity: 0.25; cursor: default; }
+        .nav-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.32); transform: scale(1.08); }
+        .nav-btn:active:not(:disabled) { transform: scale(0.92); }
+        .nav-btn:disabled { opacity: 0.25; cursor: default; }
 
-        /* Marco estético */
-        .album-frame {
-            position: relative;
-            padding: 14px;
-            border-radius: 34px;
-            background: linear-gradient(135deg, var(--yellow) 0%, var(--pink) 35%, var(--hot-pink) 68%, var(--red) 100%);
-            box-shadow: 0 22px 60px rgba(45, 10, 25, 0.5);
-        }
-        .album-frame::after {
-            content: "";
-            position: absolute;
-            inset: 7px;
-            border-radius: 27px;
-            border: 2px dashed rgba(255, 255, 255, 0.6);
-            pointer-events: none;
-        }
+        /* Marco estético */
+        .album-frame {
+            position: relative;
+            padding: 14px;
+            border-radius: 34px;
+            background: linear-gradient(135deg, var(--yellow) 0%, var(--pink) 35%, var(--hot-pink) 68%, var(--red) 100%);
+            box-shadow: 0 22px 60px rgba(45, 10, 25, 0.5);
+        }
+        .album-frame::after {
+            content: "";
+            position: absolute;
+            inset: 7px;
+            border-radius: 27px;
+            border: 2px dashed rgba(255, 255, 255, 0.6);
+            pointer-events: none;
+        }
 
-        .mini-heart {
-            position: absolute;
-            width: 22px;
-            height: 20px;
-            clip-path: path('M11,7 C11,2 4,0 2,5 C0,10 4,13 11,19 C18,13 22,10 20,5 C18,0 11,2 11,7 Z');
-            box-shadow: 0 2px 6px rgba(45, 10, 25, 0.3);
-            z-index: 12;
-            animation: mini-pulse 2.4s ease-in-out infinite;
-        }
-        @keyframes mini-pulse {
-            0%, 100% { transform: scale(1) rotate(var(--rot, 0deg)); }
-            50%      { transform: scale(1.18) rotate(var(--rot, 0deg)); }
-        }
+        .mini-heart {
+            position: absolute;
+            width: 22px;
+            height: 20px;
+            clip-path: path('M11,7 C11,2 4,0 2,5 C0,10 4,13 11,19 C18,13 22,10 20,5 C18,0 11,2 11,7 Z');
+            box-shadow: 0 2px 6px rgba(45, 10, 25, 0.3);
+            z-index: 12;
+            animation: mini-pulse 2.4s ease-in-out infinite;
+        }
+        @keyframes mini-pulse {
+            0%, 100% { transform: scale(1) rotate(var(--rot, 0deg)); }
+            50%      { transform: scale(1.18) rotate(var(--rot, 0deg)); }
+        }
 
-        /* ---------- LIBRO 3D ---------- */
-        .album-viewport {
-            position: relative;
-            height: 580px;
-            perspective: 2500px;
-            transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-            overflow: visible; 
-        }
+        /* ---------- LIBRO 3D ---------- */
+        .album-viewport {
+            position: relative;
+            height: 580px;
+            perspective: 2500px;
+            transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: visible; 
+        }
 
-        .album-viewport.single { width: var(--page-w); }
-        .album-viewport.double { width: var(--book-w); }
+        .album-viewport.single { width: var(--page-w); }
+        .album-viewport.double { width: var(--book-w); }
 
-        .book {
-            position: relative;
-            width: var(--book-w);
-            height: 100%;
-            transform-style: preserve-3d;
-            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .book.state-0 { transform: translateX(-50%); } 
-        .book.state-1 { transform: translateX(0%); }   
-        .book.state-2 { transform: translateX(0%); }   
-        .book.state-3 { transform: translateX(0%); }   
+        .book {
+            position: relative;
+            width: var(--book-w);
+            height: 100%;
+            transform-style: preserve-3d;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .book.state-0 { transform: translateX(-50%); } 
+        .book.state-1 { transform: translateX(0%); }   
+        .book.state-2 { transform: translateX(0%); }   
+        .book.state-3 { transform: translateX(0%); }   
 
-        .leaf {
-            position: absolute;
-            top: 0;
-            right: 0; 
-            width: 50%; 
-            height: 100%;
-            transform-origin: left center;
-            transform-style: preserve-3d;
-            transition: transform 0.8s cubic-bezier(0.3, 0.8, 0.2, 1);
-        }
-        .leaf.flipped { transform: rotateY(-180deg); }
+        .leaf {
+            position: absolute;
+            top: 0;
+            right: 0; 
+            width: 50%; 
+            height: 100%;
+            transform-origin: left center;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.3, 0.8, 0.2, 1);
+        }
+        .leaf.flipped { transform: rotateY(-180deg); }
 
-        .face {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            padding: 40px 22px 26px 22px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            overflow: hidden;
-        }
+        .face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 40px 22px 26px 22px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow: hidden;
+        }
 
-        .face.cover-page {
-            background: linear-gradient(135deg, rgba(199, 61, 110, 0.88), rgba(148, 38, 80, 0.94));
-            border-color: rgba(255, 202, 58, 0.65);
-        }
+        .face.cover-page {
+            background: linear-gradient(135deg, rgba(199, 61, 110, 0.88), rgba(148, 38, 80, 0.94));
+            border-color: rgba(255, 202, 58, 0.65);
+        }
 
-        .face.front {
-            transform: rotateY(0deg);
-            border-radius: 0 24px 24px 0;
-        }
-        .face.back {
-            transform: rotateY(180deg);
-            border-radius: 24px 0 0 24px;
-        }
+        .face.front {
+            transform: rotateY(0deg);
+            border-radius: 0 24px 24px 0;
+        }
+        .face.back {
+            transform: rotateY(180deg);
+            border-radius: 24px 0 0 24px;
+        }
 
-        .face.front::after {
-            content: ""; position: absolute; top:0; bottom:0; left:0; width: 30px;
-            background: linear-gradient(to right, rgba(0,0,0,0.16), transparent);
-            pointer-events: none; border-radius: inherit;
-        }
-        .face.back::after {
-            content: ""; position: absolute; top:0; bottom:0; right:0; width: 30px;
-            background: linear-gradient(to left, rgba(0,0,0,0.16), transparent);
-            pointer-events: none; border-radius: inherit;
-        }
+        .face.front::after {
+            content: ""; position: absolute; top:0; bottom:0; left:0; width: 30px;
+            background: linear-gradient(to right, rgba(0,0,0,0.16), transparent);
+            pointer-events: none; border-radius: inherit;
+        }
+        .face.back::after {
+            content: ""; position: absolute; top:0; bottom:0; right:0; width: 30px;
+            background: linear-gradient(to left, rgba(0,0,0,0.16), transparent);
+            pointer-events: none; border-radius: inherit;
+        }
 
-        .face::before {
-            content: "";
-            position: absolute;
-            inset: -1px;
-            border-radius: inherit;
-            padding: 1px;
-            background: linear-gradient(135deg, var(--yellow), var(--pink), var(--red));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none;
-            opacity: 0.85;
-        }
-        
-        @media (max-width: 600px) {
-            .face { padding: 30px 15px 20px 15px; }
-            h1 { font-size: 1.6rem !important; }
-            h2 { font-size: 1.3rem !important; }
-            p { font-size: 0.9rem !important; }
-        }
+        .face::before {
+            content: "";
+            position: absolute;
+            inset: -1px;
+            border-radius: inherit;
+            padding: 1px;
+            background: linear-gradient(135deg, var(--yellow), var(--pink), var(--red));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.85;
+        }
+        
+        @media (max-width: 600px) {
+            .face { padding: 30px 15px 20px 15px; }
+            h1 { font-size: 1.6rem !important; }
+            h2 { font-size: 1.3rem !important; }
+            p { font-size: 0.9rem !important; }
+        }
 
-        /* ---------- Estilo Polaroids ---------- */
-        .polaroid {
-            background: white;
-            padding: 10px 10px 24px 10px;
-            border-radius: 4px;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
-            color: #333;
-            transform: rotate(var(--rot, -2deg));
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            width: 82%;
-            max-width: 250px;
-            margin: 10px auto;
-            position: relative;
-        }
-        .polaroid:hover {
-            transform: rotate(0deg) scale(1.03);
-            box-shadow: 0 14px 26px rgba(0, 0, 0, 0.3);
-            z-index: 5;
-        }
-        .polaroid-img {
-            width: 100%;
-            height: 140px;
-            background: #f0f0f0;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 0.85rem;
-            color: #888;
-            overflow: hidden;
-        }
-        .polaroid-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .polaroid-caption {
-            font-family: 'Indie Flower', cursive;
-            font-size: 1.25rem;
-            color: #444;
-            margin-top: 8px;
-            text-align: center;
-            line-height: 1.1;
-        }
+        /* ---------- Puntos de navegación ---------- */
+        .dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.35);
+            cursor: pointer;
+            border: none;
+            padding: 0;
+            transition: all 0.25s ease;
+        }
+        .dot.active { background: var(--yellow); width: 22px; border-radius: 5px; }
 
-        /* ---------- Botón de Nota de Voz Personalizada ---------- */
-        .voice-btn {
-            background: linear-gradient(135deg, var(--hot-pink), var(--red));
-            border: none;
-            border-radius: 50px;
-            color: white;
-            padding: 10px 20px;
-            font-family: 'Fredoka', sans-serif;
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 14px rgba(230, 57, 70, 0.4);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            margin-top: 10px;
-            outline: none;
-        }
-        .voice-btn:hover { transform: scale(1.05); box-shadow: 0 6px 18px rgba(230, 57, 70, 0.6); }
-        .voice-btn:active { transform: scale(0.95); }
+        /* ---------- Estilo Polaroids ---------- */
+        .polaroid {
+            background: white;
+            padding: 10px 10px 24px 10px;
+            border-radius: 4px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.25);
+            color: #333;
+            transform: rotate(var(--rot, -2deg));
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 82%;
+            max-width: 250px;
+            margin: 10px auto;
+            position: relative;
+        }
+        .polaroid:hover {
+            transform: rotate(0deg) scale(1.03);
+            box-shadow: 0 14px 26px rgba(0, 0, 0, 0.3);
+            z-index: 5;
+        }
+        .polaroid-img {
+            width: 100%;
+            height: 140px;
+            background: #f0f0f0;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            color: #888;
+            overflow: hidden;
+        }
+        .polaroid-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .polaroid-caption {
+            font-family: 'Indie Flower', cursive;
+            font-size: 1.25rem;
+            color: #444;
+            margin-top: 8px;
+            text-align: center;
+            line-height: 1.1;
+        }
 
-        h1 { font-family: 'Fredoka', sans-serif; font-size: 2.1rem; margin: 0 0 10px 0; font-weight: 700; text-shadow: 0 3px 12px rgba(85, 18, 45, 0.35); }
-        h2 { font-family: 'Fredoka', sans-serif; font-size: 1.5rem; margin: 0 0 8px 0; font-weight: 600; }
-        p { font-size: 0.95rem; line-height: 1.45; opacity: 0.95; margin-bottom: 12px; }
+        /* ---------- Botón de Nota de Voz Personalizada ---------- */
+        .voice-btn {
+            background: linear-gradient(135deg, var(--hot-pink), var(--red));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            padding: 10px 20px;
+            font-family: 'Fredoka', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 14px rgba(230, 57, 70, 0.4);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+            outline: none;
+        }
+        .voice-btn:hover { transform: scale(1.05); box-shadow: 0 6px 18px rgba(230, 57, 70, 0.6); }
+        .voice-btn:active { transform: scale(0.95); }
 
-        /* ---------- Botón Sorpresa (Corazón) ---------- */
-        .btn-container {
-            position: relative;
-            width: 130px;
-            height: 130px;
-            margin: 2px auto 0 auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-        .ring { position: absolute; top: 50%; left: 50%; width: 90px; height: 90px; border: 2px solid rgba(255, 202, 58, 0.6); border-radius: 50%; transform: translate(-50%, -50%) scale(0.85); animation: ripple 3s ease-out infinite; z-index: 0; }
-        .ring.ring2 { animation-delay: 1.5s; border-color: rgba(255, 101, 132, 0.55); }
-        @keyframes ripple { 0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.9; } 100% { transform: translate(-50%, -50%) scale(1.7); opacity: 0; } }
-        
-        .glow { position: absolute; top: 50%; left: 50%; width: 150px; height: 150px; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(255, 202, 58, 0.65) 0%, rgba(255, 202, 58, 0) 70%); border-radius: 50%; animation: glow-pulse 2.2s ease-in-out infinite; z-index: 0; }
-        @keyframes glow-pulse { 0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(0.92); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); } }
-        
-        .orbit { position: absolute; top: 50%; left: 50%; width: 110px; height: 110px; transform: translate(-50%, -50%); animation: spin 16s linear infinite; z-index: 1; pointer-events: none; }
-        .spark { position: absolute; transform: translate(-50%, -50%); color: var(--yellow); font-size: 13px; text-shadow: 0 0 6px rgba(255, 202, 58, 0.85); }
-        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+        h1 { font-family: 'Fredoka', sans-serif; font-size: 2.1rem; margin: 0 0 10px 0; font-weight: 700; text-shadow: 0 3px 12px rgba(85, 18, 45, 0.35); }
+        h2 { font-family: 'Fredoka', sans-serif; font-size: 1.5rem; margin: 0 0 8px 0; font-weight: 600; }
+        p { font-size: 0.95rem; line-height: 1.45; opacity: 0.95; margin-bottom: 12px; }
 
-        .heart-btn { background: none; border: none; cursor: pointer; position: relative; width: 90px; height: 90px; padding: 0; display: block; animation: pulse 1.6s ease-in-out infinite; transition: transform 0.25s ease; outline: none; z-index: 2; }
-        .heart-btn:hover { transform: scale(1.07); }
-        .heart-btn:active { transform: scale(0.92); }
+        /* ---------- Botón Sorpresa (Corazón) ---------- */
+        .btn-container {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            margin: 2px auto 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .ring { position: absolute; top: 50%; left: 50%; width: 90px; height: 90px; border: 2px solid rgba(255, 202, 58, 0.6); border-radius: 50%; transform: translate(-50%, -50%) scale(0.85); animation: ripple 3s ease-out infinite; z-index: 0; }
+        .ring.ring2 { animation-delay: 1.5s; border-color: rgba(255, 101, 132, 0.55); }
+        @keyframes ripple { 0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.9; } 100% { transform: translate(-50%, -50%) scale(1.7); opacity: 0; } }
+        
+        .glow { position: absolute; top: 50%; left: 50%; width: 150px; height: 150px; transform: translate(-50%, -50%); background: radial-gradient(circle, rgba(255, 202, 58, 0.65) 0%, rgba(255, 202, 58, 0) 70%); border-radius: 50%; animation: glow-pulse 2.2s ease-in-out infinite; z-index: 0; }
+        @keyframes glow-pulse { 0%, 100% { opacity: 0.55; transform: translate(-50%, -50%) scale(0.92); } 50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); } }
+        
+        .orbit { position: absolute; top: 50%; left: 50%; width: 110px; height: 110px; transform: translate(-50%, -50%); animation: spin 16s linear infinite; z-index: 1; pointer-events: none; }
+        .spark { position: absolute; transform: translate(-50%, -50%); color: var(--yellow); font-size: 13px; text-shadow: 0 0 6px rgba(255, 202, 58, 0.85); }
+        @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
-        .heart-shape { position: absolute; inset: 0; background: linear-gradient(155deg, var(--hot-pink) 0%, var(--red) 65%, #b51a32 100%); clip-path: path('M50,30 C50,10 20,0 10,20 C0,40 15,55 50,85 C85,55 100,40 90,20 C80,0 50,10 50,30 Z'); box-shadow: 0 8px 22px rgba(230, 57, 70, 0.55); }
-        .heart-shine { position: absolute; top: 15px; left: 20px; width: 26px; height: 15px; background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 70%); border-radius: 50%; transform: rotate(-20deg); pointer-events: none; }
-        .heart-number { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding-top: 5px; font-family: 'Fredoka', sans-serif; font-size: 1.7rem; font-weight: 600; color: var(--cream); text-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 3; }
+        .heart-btn { background: none; border: none; cursor: pointer; position: relative; width: 90px; height: 90px; padding: 0; display: block; animation: pulse 1.6s ease-in-out infinite; transition: transform 0.25s ease; outline: none; z-index: 2; }
+        .heart-btn:hover { transform: scale(1.07); }
+        .heart-btn:active { transform: scale(0.92); }
 
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
-        .instruccion { font-size: 0.83rem; opacity: 0.88; margin-top: 10px; font-style: italic; color: var(--cream); }
+        .heart-shape { position: absolute; inset: 0; background: linear-gradient(155deg, var(--hot-pink) 0%, var(--red) 65%, #b51a32 100%); clip-path: path('M50,30 C50,10 20,0 10,20 C0,40 15,55 50,85 C85,55 100,40 90,20 C80,0 50,10 50,30 Z'); box-shadow: 0 8px 22px rgba(230, 57, 70, 0.55); }
+        .heart-shine { position: absolute; top: 15px; left: 20px; width: 26px; height: 15px; background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 70%); border-radius: 50%; transform: rotate(-20deg); pointer-events: none; }
+        .heart-number { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; padding-top: 5px; font-family: 'Fredoka', sans-serif; font-size: 1.7rem; font-weight: 600; color: var(--cream); text-shadow: 0 2px 4px rgba(0,0,0,0.3); z-index: 3; }
 
-        /* ---------- Globos ---------- */
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.08); } 100% { transform: scale(1); } }
+        .instruccion { font-size: 0.83rem; opacity: 0.88; margin-top: 10px; font-style: italic; color: var(--cream); }
 
-.balloon{
-    position:fixed;
-    bottom:-120px;
-    width:54px;
-    height:68px;
-    border-radius:50% 50% 50% 50% / 58% 58% 42% 42%;
-    z-index:20;
-    cursor:pointer;
-
-    box-shadow:
-        inset -8px -10px 14px rgba(0,0,0,.16),
-        inset 8px 10px 14px rgba(255,255,255,.4),
-        0 8px 18px rgba(0,0,0,.18);
-
-    transition:
-        bottom 5.5s linear,
-        transform .2s ease;
-}
-
-.balloon:hover{
-    transform:scale(1.12);
-}
-
-.balloon.popping{
-    transform:scale(1.35);
-    opacity:0;
-    pointer-events:none;
-    transition:
-        transform .18s ease,
-        opacity .18s ease;
-}
-
-.b-shine{
-    position:absolute;
-    top:12px;
-    left:13px;
-    width:14px;
-    height:22px;
-    background:rgba(255,255,255,.6);
-    border-radius:50%;
-    filter:blur(1.5px);
-    transform:rotate(-18deg);
-}
-
-.b-knot{
-    position:absolute;
-    top:100%;
-    left:50%;
-    width:8px;
-    height:8px;
-    transform:translateX(-50%);
-    clip-path:polygon(0 0,100% 0,50% 100%);
-    filter:brightness(.85);
-}
-
-.b-string{
-    position:absolute;
-    top:calc(100% + 7px);
-    left:50%;
-    width:1px;
-    height:65px;
-    background:rgba(255,255,255,.55);
-}
-    </style>
+        /* ---------- Globos ---------- */
+        .balloon { position: fixed; bottom: -160px; width: 50px; height: 62px; border-radius: 50% 50% 50% 50% / 58% 58% 42% 42%; z-index: 20; cursor: pointer; animation: rise linear forwards; box-shadow: inset -8px -10px 14px rgba(0,0,0,0.16), inset 8px 10px 14px rgba(255,255,255,0.4), 0 6px 14px rgba(0,0,0,0.15); }
+        .balloon.popping { transition: transform 0.18s ease, opacity 0.18s ease; transform: scale(1.35); opacity: 0; }
+        .b-shine { position: absolute; top: 11px; left: 12px; width: 14px; height: 20px; background: rgba(255, 255, 255, 0.6); border-radius: 50%; filter: blur(1.5px); transform: rotate(-18deg); }
+        .b-knot { position: absolute; top: 100%; left: 50%; width: 8px; height: 8px; transform: translateX(-50%); clip-path: polygon(0 0, 100% 0, 50% 100%); filter: brightness(0.85); }
+        .b-string { position: absolute; top: calc(100% + 7px); left: 50%; width: 1px; height: 58px; background: rgba(255, 255, 255, 0.55); }
+        @keyframes rise { 0% { transform: translateY(0) translateX(0) rotate(-4deg); opacity: 1; } 25% { transform: translateY(calc(var(--rise) * 0.25)) translateX(18px) rotate(4deg); } 50% { transform: translateY(calc(var(--rise) * 0.55)) translateX(-16px) rotate(-4deg); } 75% { transform: translateY(calc(var(--rise) * 0.85)) translateX(14px) rotate(3deg); } 100% { transform: translateY(var(--rise)) translateX(0) rotate(0deg); opacity: 1; } }
+    </style>
 </head>
 <body id="dynamicBody">
 
-    <!-- Elementos del Cielo (Estrellas, Sol y Rayos) -->
-    <div id="skyContainer"></div>
-    <div class="sky-element" id="sun"></div>
-    <div class="sky-element sun-ray" id="sunRay"></div>
-    <div class="shooting-star" id="shootingStar"></div>
+    <!-- Elementos del Cielo (Estrellas, Sol y Rayos) -->
+    <div id="skyContainer"></div>
+    <div class="sky-element" id="sun"></div>
+    <div class="sky-element sun-ray" id="sunRay"></div>
+    <div class="shooting-star" id="shootingStar"></div>
 
-    <!-- Fondos animados -->
-    <div class="bg-blob" id="blob1" style="left:-10%; top:-8%;  width:60vw; height:60vw; background:var(--pink);   opacity:0.6; animation-duration:14s;"></div>
-    <div class="bg-blob" id="blob2" style="right:-15%; top:5%;  width:55vw; height:55vw; background:var(--yellow); opacity:0.4; animation-duration:17s;"></div>
-    <div class="bg-blob" id="blob3" style="left:5%; bottom:-15%; width:55vw; height:55vw; background:var(--red);    opacity:0.5; animation-duration:16s;"></div>
-    <div class="bg-blob" id="blob4" style="right:-10%; bottom:-12%; width:48vw; height:48vw; background:var(--coral);  opacity:0.5; animation-duration:19s;"></div>
+    <!-- Fondos animados -->
+    <div class="bg-blob" id="blob1" style="left:-10%; top:-8%;  width:60vw; height:60vw; background:var(--pink);   opacity:0.6; animation-duration:14s;"></div>
+    <div class="bg-blob" id="blob2" style="right:-15%; top:5%;  width:55vw; height:55vw; background:var(--yellow); opacity:0.4; animation-duration:17s;"></div>
+    <div class="bg-blob" id="blob3" style="left:5%; bottom:-15%; width:55vw; height:55vw; background:var(--red);    opacity:0.5; animation-duration:16s;"></div>
+    <div class="bg-blob" id="blob4" style="right:-10%; bottom:-12%; width:48vw; height:48vw; background:var(--coral);  opacity:0.5; animation-duration:19s;"></div>
 
-    <div class="ambient-confetti circle" style="left:8%;  width:8px; height:8px; background:var(--yellow); animation-duration:9s;  animation-delay:0s;"></div>
-    <div class="ambient-confetti circle" style="left:18%; width:6px; height:6px; background:var(--pink);   animation-duration:11s; animation-delay:2s;"></div>
-    <div class="ambient-confetti tri"    style="left:28%; --c:var(--red);    animation-duration:8s;  animation-delay:1s;"></div>
-    <div class="ambient-confetti circle" style="left:72%; width:7px; height:7px; background:var(--yellow); animation-duration:10s; animation-delay:0.5s;"></div>
-    <div class="ambient-confetti tri"    style="left:84%; --c:var(--pink);   animation-duration:9.5s; animation-delay:3s;"></div>
+    <div class="ambient-confetti circle" style="left:8%;  width:8px; height:8px; background:var(--yellow); animation-duration:9s;  animation-delay:0s;"></div>
+    <div class="ambient-confetti circle" style="left:18%; width:6px; height:6px; background:var(--pink);   animation-duration:11s; animation-delay:2s;"></div>
+    <div class="ambient-confetti tri"    style="left:28%; --c:var(--red);    animation-duration:8s;  animation-delay:1s;"></div>
+    <div class="ambient-confetti circle" style="left:72%; width:7px; height:7px; background:var(--yellow); animation-duration:10s; animation-delay:0.5s;"></div>
+    <div class="ambient-confetti tri"    style="left:84%; --c:var(--pink);   animation-duration:9.5s; animation-delay:3s;"></div>
 
-    <div class="banderin">
-        <div class="flag" style="left:0%; background:var(--yellow);"></div>
-        <div class="flag" style="left:16%; background:var(--pink);"></div>
-        <div class="flag" style="left:32%; background:var(--red);"></div>
-        <div class="flag" style="left:48%; background:var(--coral);"></div>
-        <div class="flag" style="left:64%; background:var(--yellow);"></div>
-        <div class="flag" style="left:80%; background:var(--pink);"></div>
-        <div class="flag" style="left:96%; background:var(--red);"></div>
-    </div>
+    <div class="banderin">
+        <div class="flag" style="left:0%; background:var(--yellow);"></div>
+        <div class="flag" style="left:16%; background:var(--pink);"></div>
+        <div class="flag" style="left:32%; background:var(--red);"></div>
+        <div class="flag" style="left:48%; background:var(--coral);"></div>
+        <div class="flag" style="left:64%; background:var(--yellow);"></div>
+        <div class="flag" style="left:80%; background:var(--pink);"></div>
+        <div class="flag" style="left:96%; background:var(--red);"></div>
+    </div>
 
-    <!-- Contenedor del Álbum -->
-    <div class="album-shell">
-        <div class="carousel-row">
-            <button class="nav-btn" id="prevBtn" aria-label="Página anterior">‹</button>
+    <!-- Contenedor del Álbum -->
+    <div class="album-shell">
+        <div class="carousel-row">
+            <button class="nav-btn" id="prevBtn" aria-label="Página anterior">‹</button>
 
-            <div class="album-frame">
-                <div class="mini-heart" style="top:-9px; left:-9px; background:var(--red); --rot:-18deg; animation-delay:0s;"></div>
-                <div class="mini-heart" style="top:-9px; right:-9px; background:var(--yellow); --rot:16deg; animation-delay:0.4s;"></div>
-                <div class="mini-heart" style="bottom:-9px; left:-9px; background:var(--yellow); --rot:14deg; animation-delay:0.8s;"></div>
-                <div class="mini-heart" style="bottom:-9px; right:-9px; background:var(--red); --rot:-14deg; animation-delay:1.2s;"></div>
+            <div class="album-frame">
+                <div class="mini-heart" style="top:-9px; left:-9px; background:var(--red); --rot:-18deg; animation-delay:0s;"></div>
+                <div class="mini-heart" style="top:-9px; right:-9px; background:var(--yellow); --rot:16deg; animation-delay:0.4s;"></div>
+                <div class="mini-heart" style="bottom:-9px; left:-9px; background:var(--yellow); --rot:14deg; animation-delay:0.8s;"></div>
+                <div class="mini-heart" style="bottom:-9px; right:-9px; background:var(--red); --rot:-14deg; animation-delay:1.2s;"></div>
 
-                <div class="album-viewport single" id="viewport">
-                    <div class="book state-0" id="book">
-                        
-                        <!-- HOJA 1 (Pág 1: Portada | Pág 2: Interior Polaroid 1) -->
-                        <div class="leaf" id="leaf1">
-                            <div class="face front cover-page">
-                                <h1>¡Feliz Cumpleaños! 🎂</h1>
-                                <p>Hoy celebras una edad mágica. Que la vida te llene de momentos tan divinos como tú.</p>
+                <div class="album-viewport single" id="viewport">
+                    <div class="book state-0" id="book">
+                        
+                        <!-- HOJA 1 (Pág 1: Portada | Pág 2: Interior Polaroid 1) -->
+                        <div class="leaf" id="leaf1">
+                            <div class="face front cover-page">
+                                <h1>¡Feliz Cumpleaños! 🎂</h1>
+                                <p>Hoy celebras una edad mágica. Que la vida te llene de momentos tan divinos como tú.</p>
 
-                                <div class="btn-container">
-                                    <div class="ring"></div><div class="ring ring2"></div><div class="glow"></div>
-                                    <div class="orbit">
-                                        <span class="spark" style="top:0%; left:50%;">✦</span>
-                                        <span class="spark" style="top:50%; left:100%;">✧</span>
-                                        <span class="spark" style="top:100%; left:50%;">✦</span>
-                                        <span class="spark" style="top:50%; left:0%;">✧</span>
-                                    </div>
-                                    <button class="heart-btn" id="magicButton">
-                                        <div class="heart-shape"></div>
-                                        <div class="heart-shine"></div>
-                                        <span class="heart-number">18</span>
-                                    </button>
-                                </div>
-                                <div class="instruccion">¡Presiona el corazón para tu sorpresa! ✨</div>
-                            </div>
-                            
-                            <div class="face back">
-                                <h2>Nuestros Momentos</h2>
-                                <div class="polaroid" style="--rot: -2deg;">
-                                    <div class="polaroid-img">
-                                        <span>📷 Tu Foto Aquí</span>
-                                    </div>
-                                    <div class="polaroid-caption">El inicio de todo ✨</div>
-                                </div>
-                            </div>
-                        </div>
+                                <div class="btn-container">
+                                    <div class="ring"></div><div class="ring ring2"></div><div class="glow"></div>
+                                    <div class="orbit">
+                                        <span class="spark" style="top:0%; left:50%;">✦</span>
+                                        <span class="spark" style="top:50%; left:100%;">✧</span>
+                                        <span class="spark" style="top:100%; left:50%;">✦</span>
+                                        <span class="spark" style="top:50%; left:0%;">✧</span>
+                                    </div>
+                                    <button class="heart-btn" id="magicButton">
+                                        <div class="heart-shape"></div>
+                                        <div class="heart-shine"></div>
+                                        <span class="heart-number">18</span>
+                                    </button>
+                                </div>
+                                <div class="instruccion">¡Presiona el corazón para tu sorpresa! ✨</div>
+                            </div>
+                            
+                            <div class="face back">
+                                <h2>Nuestros Momentos</h2>
+                                <div class="polaroid" style="--rot: -2deg;">
+                                    <div class="polaroid-img">
+                                        <span>📷 Tu Foto Aquí</span>
+                                    </div>
+                                    <div class="polaroid-caption">El inicio de todo ✨</div>
+                                </div>
+                            </div>
+                        </div>
 
-                        <!-- HOJA 2 (Pág 3: Polaroid 2 + Botón Audio | Pág 4: Interior) -->
-                        <div class="leaf" id="leaf2">
-                            <div class="face front">
-                                <h2>Recuerdos Inolvidables</h2>
-                                <div class="polaroid" style="--rot: 2.5deg;">
-                                    <div class="polaroid-img">
-                                        <span>📷 Tu Foto Aquí</span>
-                                    </div>
-                                    <div class="polaroid-caption">¡Qué gran día! 💖</div>
-                                </div>
-                                <!-- Botón para Nota de Voz -->
-                                <button class="voice-btn" id="voiceBtn">
-                                    <span>▶</span> Escuchar Dedicatoria 💌
-                                </button>
-                                <audio id="voiceNote" src="felicitacion.mp3"></audio>
-                            </div>
+                        <!-- HOJA 2 (Pág 3: Polaroid 2 + Botón Audio | Pág 4: Interior) -->
+                        <div class="leaf" id="leaf2">
+                            <div class="face front">
+                                <h2>Recuerdos Inolvidables</h2>
+                                <div class="polaroid" style="--rot: 2.5deg;">
+                                    <div class="polaroid-img">
+                                        <span>📷 Tu Foto Aquí</span>
+                                    </div>
+                                    <div class="polaroid-caption">¡Qué gran día! 💖</div>
+                                </div>
+                                <!-- Botón para Nota de Voz -->
+                                <button class="voice-btn" id="voiceBtn">
+                                    <span>▶</span> Escuchar Dedicatoria 💌
+                                </button>
+                                <audio id="voiceNote" src="felicitacion.mp3"></audio>
+                            </div>
 
-                            <div class="face back">
-                                <h2>Página 4</h2>
-                                <p>Cada risa a tu lado es un tesoro guardado en el corazón.</p>
-                                <div class="polaroid" style="--rot: -1.5deg;">
-                                    <div class="polaroid-img">
-                                        <span>📷 Tu Foto Aquí</span>
-                                    </div>
-                                    <div class="polaroid-caption">Imparables juntos 🚀</div>
-                                </div>
-                            </div>
-                        </div>
+                            <div class="face back">
+                                <h2>Página 4</h2>
+                                <p>Cada risa a tu lado es un tesoro guardado en el corazón.</p>
+                                <div class="polaroid" style="--rot: -1.5deg;">
+                                    <div class="polaroid-img">
+                                        <span>📷 Tu Foto Aquí</span>
+                                    </div>
+                                    <div class="polaroid-caption">Imparables juntos 🚀</div>
+                                </div>
+                            </div>
+                        </div>
 
-                        <!-- HOJA 3 (Pág 5: Interior | Pág 6: Contraportada con "Continuará...") -->
-                        <div class="leaf" id="leaf3">
-                            <div class="face front">
-                                <h2>Página 5</h2>
-                                <p>Brindemos por todos los capítulos que nos faltan por escribir juntos.</p>
-                                <div class="polaroid" style="--rot: 2deg;">
-                                    <div class="polaroid-img">
-                                        <span>📷 Tu Foto Aquí</span>
-                                    </div>
-                                    <div class="polaroid-caption">¡Por muchos más! 🥂</div>
-                                </div>
-                            </div>
+                        <!-- HOJA 3 (Pág 5: Interior | Pág 6: Contraportada con "Continuará...") -->
+                        <div class="leaf" id="leaf3">
+                            <div class="face front">
+                                <h2>Página 5</h2>
+                                <p>Brindemos por todos los capítulos que nos faltan por escribir juntos.</p>
+                                <div class="polaroid" style="--rot: 2deg;">
+                                    <div class="polaroid-img">
+                                        <span>📷 Tu Foto Aquí</span>
+                                    </div>
+                                    <div class="polaroid-caption">¡Por muchos más! 🥂</div>
+                                </div>
+                            </div>
 
-                            <div class="face back cover-page" style="justify-content: center;">
-                                <h1 style="font-size: 2.3rem; margin-bottom: 10px;">Continuará...</h1>
-                                <p style="font-size: 1.05rem; opacity: 0.95;">La mejor parte de nuestra historia apenas comienza 💖</p>
-                            </div>
-                        </div>
+                            <div class="face back cover-page" style="justify-content: center;">
+                                <h1 style="font-size: 2.3rem; margin-bottom: 10px;">Continuará...</h1>
+                                <p style="font-size: 1.05rem; opacity: 0.95;">La mejor parte de nuestra historia apenas comienza 💖</p>
+                            </div>
+                        </div>
 
-                    </div>
-                </div>
-            </div>
+                    </div>
+                </div>
+            </div>
 
-            <button class="nav-btn" id="nextBtn" aria-label="Página siguiente">›</button>
-        </div>
-    </div>
+            <button class="nav-btn" id="nextBtn" aria-label="Página siguiente">›</button>
+        </div>
 
-    <!-- Audio de fondo principal -->
-    <audio id="bgMusic" loop>
-        <source src="mujer-divina.mp3" type="audio/mpeg">
-    </audio>
+        <!-- 4 Puntos de navegación para los 4 estados del libro -->
+        <div class="dots" id="dots">
+            <button class="dot active" data-index="0"></button>
+            <button class="dot" data-index="1"></button>
+            <button class="dot" data-index="2"></button>
+            <button class="dot" data-index="3"></button>
+        </div>
+    </div>
 
-    <script>
-        /* ---------- Generar Estrellas de fondo ---------- */
-        const skyContainer = document.getElementById('skyContainer');
-        const totalStars = 35;
-        for (let i = 0; i < totalStars; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = `${Math.random() * 100}%`;
-            star.style.top = `${Math.random() * 100}%`;
-            const size = 2 + Math.random() * 3;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            star.style.animationDelay = `${Math.random() * 2}s`;
-            skyContainer.appendChild(star);
-        }
+    <!-- Audio de fondo principal -->
+    <audio id="bgMusic" loop>
+        <source src="mujer-divina.mp3" type="audio/mpeg">
+    </audio>
 
-        /* ---------- Disparar Estrella Fugaz cada 18 segundos ---------- */
-        const shootingStar = document.getElementById('shootingStar');
-        function triggerShootingStar() {
-            shootingStar.style.animation = 'none';
-            void shootingStar.offsetWidth; // Forzar reflow
-            shootingStar.style.animation = 'shoot 1.5s ease-out forwards';
-        }
-        setInterval(triggerShootingStar, 18000);
+    <script>
+        /* ---------- Generar Estrellas de fondo ---------- */
+        const skyContainer = document.getElementById('skyContainer');
+        const totalStars = 35;
+        for (let i = 0; i < totalStars; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            const size = 2 + Math.random() * 3;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.animationDelay = `${Math.random() * 2}s`;
+            skyContainer.appendChild(star);
+        }
 
-        /* ---------- Fondo dinámico según la hora GMT-5 con detalles de sol, rayos y estrellas ---------- */
-        function applyTimeBasedTheme() {
-            const now = new Date();
-            const utcHours = now.getUTCHours();
-            let gmt5Hour = (utcHours - 5 + 24) % 24;
+        /* ---------- Disparar Estrella Fugaz cada 18 segundos ---------- */
+        const shootingStar = document.getElementById('shootingStar');
+        function triggerShootingStar() {
+            shootingStar.style.animation = 'none';
+            void shootingStar.offsetWidth; // Forzar reflow
+            shootingStar.style.animation = 'shoot 1.5s ease-out forwards';
+        }
+        setInterval(triggerShootingStar, 18000);
 
-            const body = document.getElementById('dynamicBody');
-            const blob1 = document.getElementById('blob1');
-            const blob2 = document.getElementById('blob2');
-            const blob3 = document.getElementById('blob3');
-            const blob4 = document.getElementById('blob4');
-            const sun = document.getElementById('sun');
-            const sunRay = document.getElementById('sunRay');
-            const stars = document.querySelectorAll('.star');
+        /* ---------- Fondo dinámico según la hora GMT-5 con detalles de sol, rayos y estrellas ---------- */
+        function applyTimeBasedTheme() {
+            const now = new Date();
+            const utcHours = now.getUTCHours();
+            let gmt5Hour = (utcHours - 5 + 24) % 24;
 
-            if (gmt5Hour >= 0 && gmt5Hour < 6) {
-                body.style.background = 'linear-gradient(160deg, #120412 0%, #290a22 48%, #0a0209 100%)';
-                blob1.style.background = '#4a0e4e';
-                blob2.style.background = '#22092c';
-                blob3.style.background = '#1a001a';
-                blob4.style.background = '#2e0f3d';
-                sun.style.opacity = '0';
-                sunRay.style.opacity = '0';
-                stars.forEach(s => s.style.opacity = '0.9');
-            } else if (gmt5Hour >= 6 && gmt5Hour < 9) {
-                body.style.background = 'linear-gradient(160deg, #5c2040 0%, #8a3c58 48%, #2d1020 100%)';
-                blob1.style.background = '#ff85a1';
-                blob2.style.background = '#ffb703';
-                blob3.style.background = '#b5179e';
-                blob4.style.background = '#7209b7';
-                sun.style.opacity = '0.85';
-                sunRay.style.opacity = '0.7';
-                stars.forEach(s => s.style.opacity = '0.4');
-            } else if (gmt5Hour >= 9 && gmt5Hour < 17) {
-                body.style.background = 'linear-gradient(160deg, #a22d56 0%, #d95379 48%, #661836 100%)';
-                blob1.style.background = '#ffb703';
-                blob2.style.background = '#ff70a6';
-                blob3.style.background = '#ff9e00';
-                blob4.style.background = '#ffd166';
-                sun.style.opacity = '1';
-                sunRay.style.opacity = '1';
-                stars.forEach(s => s.style.opacity = '0.1');
-            } else if (gmt5Hour >= 17 && gmt5Hour < 20) {
-                body.style.background = 'linear-gradient(160deg, #661a38 0%, #943355 48%, #381020 100%)';
-                blob1.style.background = '#fb8500';
-                blob2.style.background = '#d90429';
-                blob3.style.background = '#7209b7';
-                blob4.style.background = '#b5179e';
-                sun.style.opacity = '0.5';
-                sunRay.style.opacity = '0.3';
-               
+            const body = document.getElementById('dynamicBody');
+            const blob1 = document.getElementById('blob1');
+            const blob2 = document.getElementById('blob2');
+            const blob3 = document.getElementById('blob3');
+            const blob4 = document.getElementById('blob4');
+            const sun = document.getElementById('sun');
+            const sunRay = document.getElementById('sunRay');
+            const stars = document.querySelectorAll('.star');
+
+            if (gmt5Hour >= 0 && gmt5Hour < 6) {
+                // Madrugada: Oscuro profundo, estrellas muy visibles, sin sol
+                body.style.background = 'linear-gradient(160deg, #120412 0%, #290a22 48%, #0a0209 100%)';
+                blob1.style.background = '#4a0e4e';
+                blob2.style.background = '#22092c';
+                blob3.style.background = '#1a001a';
+                blob4.style.background = '#2e0f3d';
+                sun.style.opacity = '0';
+                sunRay.style.opacity = '0';
+                stars.forEach(s => s.style.opacity = '0.9');
+
+            } else if (gmt5Hour >= 6 && gmt5Hour < 9) {
+                // Amanecer: Empieza a notarse el sol y rayos de luz, pero conservando algo de oscuridad y estrellas tenues
+                body.style.background = 'linear-gradient(160deg, #5c2040 0%, #8a3c58 48%, #2d1020 100%)';
+                blob1.style.background = '#ff85a1';
+                blob2.style.background = '#ffb703';
+                blob3.style.background = '#b5179e';
+                blob4.style.background = '#7209b7';
+                sun.style.opacity = '0.85';
+                sunRay.style.opacity = '0.7';
+                stars.forEach(s => s.style.opacity = '0.4');
+
+            } else if (gmt5Hour >= 9 && gmt5Hour < 17) {
+                // Día pleno: Día claro, sol radiante, rayos activos, oscuridad y estrellas casi imperceptibles
+                body.style.background = 'linear-gradient(160deg, #a22d56 0%, #d95379 48%, #661836 100%)';
+                blob1.style.background = '#ffb703';
+                blob2.style.background = '#ff70a6';
+                blob3.style.background = '#ff9e00';
+                blob4.style.background = '#ffd166';
+                sun.style.opacity = '1';
+                sunRay.style.opacity = '1';
+                stars.forEach(s => s.style.opacity = '0.1');
+
+            } else if (gmt5Hour >= 17 && gmt5Hour < 20) {
+                // Atardecer: Poco a poco vuelve la oscuridad, el sol se oculta y reaparecen estrellas suavemente
+                body.style.background = 'linear-gradient(160deg, #661a38 0%, #943355 48%, #381020 100%)';
+                blob1.style.background = '#fb8500';
+                blob2.style.background = '#d90429';
+                blob3.style.background = '#7209b7';
+                blob4.style.background = '#b5179e';
+                sun.style.opacity = '0.5';
+                sunRay.style.opacity = '0.3';
+                stars.forEach(s => s.style.opacity = '0.5');
+
+            } else {
+                // Noche: Oscuridad nocturna y estrellas brillando
+                body.style.background = 'linear-gradient(160deg, #381128 0%, #5e1c3f 48%, #1f0817 100%)';
+                blob1.style.background = '#b5179e';
+                blob2.style.background = '#7209b7';
+                blob3.style.background = '#480ca8';
+                blob4.style.background = '#f72585';
+                sun.style.opacity = '0';
+                sunRay.style.opacity = '0';
+                stars.forEach(s => s.style.opacity = '0.8');
+            }
+        }
+        applyTimeBasedTheme();
+
+        /* ---------- Función de Fuegos Artificiales ---------- */
+        function launchFireworks() {
+            const duration = 2.5 * 1000;
+            const animationEnd = Date.now() + duration;
+            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+
+            function randomInRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            const interval = setInterval(function() {
+                const timeLeft = animationEnd - Date.now();
+                if (timeLeft <= 0) {
+                    return clearInterval(interval);
+                }
+                const particleCount = 50 * (timeLeft / duration);
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 },
+                    colors: ['#ffca3a', '#ff6584', '#e63946', '#ffffff']
+                }));
+                confetti(Object.assign({}, defaults, {
+                    particleCount,
+                    origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 },
+                    colors: ['#ffca3a', '#ff2a6d', '#ff758f', '#ffffff']
+                }));
+            }, 250);
+        }
+
+        /* ---------- Lógica del Libro 3D ---------- */
+        const book = document.getElementById('book');
+        const viewport = document.getElementById('viewport');
+        const leaf1 = document.getElementById('leaf1');
+        const leaf2 = document.getElementById('leaf2');
+        const leaf3 = document.getElementById('leaf3');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dots = document.querySelectorAll('.dot');
+        
+        let currentState = 0; 
+        const MAX_STATE = 3;
+        let fireworksTriggered = false;
+        let navigationUnlocked = false;
+
+        function updateBook() {
+            book.className = `book state-${currentState}`;
+            viewport.className = `album-viewport ${(currentState === 0 || currentState === MAX_STATE) ? 'single' : 'double'}`;
+
+            if (currentState === 0) {
+                leaf1.classList.remove('flipped');
+                leaf2.classList.remove('flipped');
+                leaf3.classList.remove('flipped');
+                setTimeout(() => { if (currentState === 0) { leaf1.style.zIndex = 3; leaf2.style.zIndex = 2; leaf3.style.zIndex = 1; } }, 400);
+
+            } else if (currentState === 1) {
+                leaf1.classList.add('flipped');
+                leaf2.classList.remove('flipped');
+                leaf3.classList.remove('flipped');
+                leaf1.style.zIndex = 3;
+                setTimeout(() => { if (currentState === 1) { leaf2.style.zIndex = 2; leaf3.style.zIndex = 1; } }, 300);
+
+            } else if (currentState === 2) {
+                leaf1.classList.add('flipped');
+                leaf2.classList.add('flipped');
+                leaf3.classList.remove('flipped');
+                leaf1.style.zIndex = 1;
+                leaf2.style.zIndex = 3;
+                leaf3.style.zIndex = 2;
+
+            } else if (currentState === 3) {
+                leaf1.classList.add('flipped');
+                leaf2.classList.add('flipped');
+                leaf3.classList.add('flipped');
+                leaf1.style.zIndex = 1;
+                leaf2.style.zIndex = 2;
+                leaf3.style.zIndex = 4;
+
+                if (!fireworksTriggered) {
+                    fireworksTriggered = true;
+                    launchFireworks();
+                }
+            }
+
+            prevBtn.disabled = !navigationUnlocked || currentState === 0;
+            nextBtn.disabled = !navigationUnlocked || currentState === MAX_STATE;
+            
+            dots.forEach((dot, index) => dot.classList.toggle('active', index === currentState));
+        }
+
+        prevBtn.addEventListener('click', () => { if (navigationUnlocked && currentState > 0) { currentState--; updateBook(); }});
+        nextBtn.addEventListener('click', () => { if (navigationUnlocked && currentState < MAX_STATE) { currentState++; updateBook(); }});
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                if (navigationUnlocked) {
+                    currentState = index;
+                    updateBook();
+                }
+            });
+        });
+
+        let touchStartX = 0;
+        viewport.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
+        viewport.addEventListener('touchend', e => {
+            if (!navigationUnlocked) return;
+            const delta = e.changedTouches[0].clientX - touchStartX;
+            if (delta > 60 && currentState > 0) { currentState--; updateBook(); }
+            else if (delta < -60 && currentState < MAX_STATE) { currentState++; updateBook(); }
+        }, { passive: true });
+
+        updateBook();
+
+        /* ---------- Magia de la página 1: música y globos infinitos ---------- */
+        const button = document.getElementById('magicButton');
+        const music = document.getElementById('bgMusic');
+        const START_TIME = 57; 
+
+        function startMusicAt(seconds) {
+            const playFromHere = () => {
+                music.currentTime = seconds;
+                music.play().catch(e => console.log("Error de audio: ", e));
+            };
+            if (music.readyState >= 1) playFromHere();
+            else {
+                music.addEventListener('loadedmetadata', playFromHere, { once: true });
+                music.load();
+            }
+        }
+
+        function createSingleBalloon(isInitial = false, specificDelay = 0) {
+            const colors = ['#ff6584', '#e63946', '#ffca3a', '#ff2a6d', '#ff758f', '#ffa6c1'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            const balloon = document.createElement('div');
+            balloon.className = 'balloon';
+            balloon.style.left = `${2 + Math.random() * 94}%`;
+            balloon.style.background = `radial-gradient(circle at 32% 26%, #ffffff 0%, ${color} 45%, ${color} 100%)`;
+            
+            const size = 0.75 + Math.random() * 0.6;
+            const restTop = 20 + Math.random() * 90;
+            const distance = window.innerHeight + 160 - restTop;
+            balloon.style.setProperty('--rise', `-${distance}px`);
+            balloon.style.transform = `scale(${size})`;
+            
+            const duration = 4.5 + Math.random() * 2;
+            balloon.style.animationDuration = `${duration}s`;
+            
+            if (isInitial) {
+                balloon.style.animationDelay = `${specificDelay}s`;
+            } else {
+                balloon.style.animationDelay = `0s`;
+            }
+
+            const knot = document.createElement('div'); 
+            knot.className = 'b-knot'; 
+            knot.style.background = color;
+            
+            const shine = document.createElement('div'); 
+            shine.className = 'b-shine';
+            
+            const string = document.createElement('div'); 
+            string.className = 'b-string';
+
+            balloon.append(shine, knot, string);
+
+            // Al hacer clic, explota y reemplaza de inmediato con uno nuevo desde abajo
+            balloon.addEventListener('click', () => {
+                if (balloon.classList.contains('popping')) return;
+                balloon.classList.add('popping');
+
+                const rect = balloon.getBoundingClientRect();
+                confetti({
+                    particleCount: 26, spread: 65, startVelocity: 22, scalar: 0.55,
+                    origin: { x: (rect.left + rect.width / 2) / window.innerWidth, y: (rect.top + rect.height / 2) / window.innerHeight },
+                    colors: [color, '#ffca3a', '#ffffff']
+                });
+
+                setTimeout(() => {
+                    balloon.remove();
+                    createSingleBalloon(false, 0);
+                }, 220);
+            });
+
+            document.body.appendChild(balloon);
+
+        }
+
+        function launchBalloons() {
+            for (let i = 0; i < 18; i++) {
+                createSingleBalloon(true, Math.random() * 0.9);
+            }
+        }
+
+        button.addEventListener('click', () => {
+            launchBalloons();
+            startMusicAt(START_TIME);
+            
+            navigationUnlocked = true;
+            prevBtn.classList.add('visible');
+            nextBtn.classList.add('visible');
+            updateBook();
+
+            button.style.transform = 'scale(0)';
+            setTimeout(() => {
+                button.parentElement.innerHTML = '<div style="font-size:1.5rem; margin-top:15px; font-weight:600; color:var(--cream); text-shadow: 0 3px 6px rgba(0,0,0,0.3);">¡Sorpresa! 🎉</div>';
+            }, 300);
+        });
+
+        /* ---------- Control de Nota de Voz ---------- */
+        const voiceBtn = document.getElementById('voiceBtn');
+        const voiceNote = document.getElementById('voiceNote');
+
+        voiceBtn.addEventListener('click', () => {
+            if (voiceNote.paused) {
+                music.volume = 0.3;
+                voiceNote.play().then(() => {
+                    voiceBtn.innerHTML = '<span>⏸</span> Reproduciendo...';
+                }).catch(e => {
+                    console.log("Error al reproducir audio de felicitación:", e);
+                    alert("Asegúrate de agregar el archivo 'felicitacion.mp3' en la misma carpeta.");
+                });
+            } else {
+                voiceNote.pause();
+                voiceNote.currentTime = 0;
+                voiceBtn.innerHTML = '<span>▶</span> Escuchar Dedicatoria 💌';
+                music.volume = 1.0;
+            }
+        });
+
+        voiceNote.addEventListener('ended', () => {
+            voiceBtn.innerHTML = '<span>▶</span> Escuchar Dedicatoria 💌';
+            music.volume = 1.0;
+        });
+    </script>
+</body>
+</html>
