@@ -518,62 +518,106 @@
             line-height: 1.1;
         }
 
-        /* ---------- Botón de Nota de Voz Personalizada ---------- */
-        .voice-btn {
-            background: linear-gradient(135deg, var(--hot-pink), var(--red));
-            border: none;
-            border-radius: 50px;
-            color: white;
-            padding: 10px 18px;
+        /* ---------- Reproductor de Nota de Voz Personalizada (estilo nota de audio) ---------- */
+        .voice-label {
             font-family: 'Fredoka', sans-serif;
             font-size: 0.9rem;
             font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
+            color: #7a3d17;
+            margin-top: 4px;
+            margin-bottom: 8px;
+        }
+
+        .voice-player {
+            display: flex;
             align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 14px rgba(230, 57, 70, 0.4);
+            gap: 10px;
+            width: 100%;
+            max-width: 260px;
+            margin: 0 auto;
+        }
+
+        .voice-circle-btn {
+            flex-shrink: 0;
+            width: 46px;
+            height: 46px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(145deg, var(--hot-pink), var(--red));
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 6px 16px rgba(230, 57, 70, 0.45), inset 0 1px 1px rgba(255,255,255,0.35);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             outline: none;
         }
-        .voice-btn:hover { transform: scale(1.05); box-shadow: 0 6px 18px rgba(230, 57, 70, 0.6); }
-        .voice-btn:active { transform: scale(0.95); }
+        .voice-circle-btn:hover { transform: scale(1.08); box-shadow: 0 8px 20px rgba(230, 57, 70, 0.6), inset 0 1px 1px rgba(255,255,255,0.35); }
+        .voice-circle-btn:active { transform: scale(0.94); }
 
-        .voice-controls {
+        .voice-circle-btn.stop {
+            width: 38px;
+            height: 38px;
+            font-size: 0.9rem;
+            background: linear-gradient(145deg, #ffd76b, var(--yellow));
+            color: #6b4a12;
+            box-shadow: 0 5px 14px rgba(200, 150, 20, 0.4), inset 0 1px 1px rgba(255,255,255,0.5);
+        }
+        .voice-circle-btn.stop:hover { box-shadow: 0 7px 18px rgba(200, 150, 20, 0.55), inset 0 1px 1px rgba(255,255,255,0.5); }
+
+        .voice-track-wrap {
+            flex: 1;
+            min-width: 0;
+        }
+        .voice-track {
+            position: relative;
+            width: 100%;
+            height: 18px;
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 10px;
-        }
-        .voice-mini-btn {
-            width: 34px;
-            height: 34px;
-            border-radius: 50%;
-            border: 1px solid rgba(150, 110, 50, 0.3);
-            background: linear-gradient(135deg, var(--yellow), var(--coral));
-            color: #4a2a10;
-            font-size: 0.85rem;
             cursor: pointer;
+            touch-action: none;
+        }
+        .voice-track::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 5px;
+            border-radius: 3px;
+            background: rgba(150, 110, 50, 0.22);
+        }
+        .voice-track-fill {
+            position: absolute;
+            left: 0;
+            height: 5px;
+            width: 0%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--yellow), var(--hot-pink));
+            pointer-events: none;
+        }
+        .voice-track-thumb {
+            position: absolute;
+            left: 0%;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid var(--hot-pink);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            transform: translateX(-50%);
+            pointer-events: none;
+        }
+        .voice-time-row {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.18);
-            transition: transform 0.2s ease;
-            outline: none;
-            flex-shrink: 0;
-        }
-        .voice-mini-btn:hover { transform: scale(1.1); }
-        .voice-mini-btn:active { transform: scale(0.9); }
-        .voice-mini-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
-
-        .voice-progress {
-            font-size: 0.7rem;
+            justify-content: space-between;
+            font-size: 0.68rem;
             color: #8a6a2f;
-            margin-top: 6px;
             font-family: 'Poppins', sans-serif;
+            margin-top: 3px;
         }
-
         h1 { font-family: 'Fredoka', sans-serif; font-size: 2.1rem; margin: 0 0 10px 0; font-weight: 700; text-shadow: 0 3px 12px rgba(85, 18, 45, 0.35); text-align: center; width: 100%; }
         h2 { font-family: 'Fredoka', sans-serif; font-size: 1.5rem; margin: 0 0 8px 0; font-weight: 600; text-align: center; width: 100%; }
         p { font-size: 0.95rem; line-height: 1.45; opacity: 0.95; margin-bottom: 12px; text-align: justify; text-justify: inter-word; width: 100%; }
@@ -845,16 +889,24 @@
                                     </div>
                                 </div>
                                 <div class="polaroid-hint">toca la foto para voltearla</div>
-                                <!-- Botón para Nota de Voz -->
-                                <div class="voice-controls">
-                                    <button class="voice-mini-btn" id="voiceRewind" aria-label="Retroceder 5 segundos">⏪</button>
-                                    <button class="voice-btn" id="voicePlayPause">
-                                        <span id="voicePlayIcon">▶</span> <span id="voicePlayLabel">Escuchar Dedicatoria 💌</span>
+                                <!-- Reproductor de Nota de Voz -->
+                                <div class="voice-label">Escuchar Dedicatoria 💌</div>
+                                <div class="voice-player">
+                                    <button class="voice-circle-btn" id="voicePlayPause" aria-label="Reproducir">
+                                        <span id="voicePlayIcon">▶</span>
                                     </button>
-                                    <button class="voice-mini-btn" id="voiceForward" aria-label="Adelantar 5 segundos">⏩</button>
-                                    <button class="voice-mini-btn" id="voiceStop" aria-label="Detener">⏹</button>
+                                    <div class="voice-track-wrap">
+                                        <div class="voice-track" id="voiceTrack">
+                                            <div class="voice-track-fill" id="voiceTrackFill"></div>
+                                            <div class="voice-track-thumb" id="voiceTrackThumb"></div>
+                                        </div>
+                                        <div class="voice-time-row">
+                                            <span id="voiceCurrentTime">0:00</span>
+                                            <span id="voiceDurationTime">0:00</span>
+                                        </div>
+                                    </div>
+                                    <button class="voice-circle-btn stop" id="voiceStop" aria-label="Detener">⏹</button>
                                 </div>
-                                <div class="voice-progress" id="voiceProgress"></div>
                                 <audio id="voiceNote" src="felicitacion.mp3"></audio>
                             </div>
 
@@ -939,7 +991,7 @@
     </div>
 
     <!-- Audio de fondo principal -->
-    <audio id="bgMusic" loop>
+    <audio id="bgMusic">
         <source src="mujer-divina.mp3" type="audio/mpeg">
     </audio>
 
@@ -1354,19 +1406,22 @@
             });
         }
 
-        /* ---------- Control de Nota de Voz ---------- */
+        /* ---------- Control de Nota de Voz (estilo nota de audio, con barra arrastrable) ---------- */
         const voicePlayPause = document.getElementById('voicePlayPause');
         const voicePlayIcon = document.getElementById('voicePlayIcon');
-        const voicePlayLabel = document.getElementById('voicePlayLabel');
-        const voiceRewind = document.getElementById('voiceRewind');
-        const voiceForward = document.getElementById('voiceForward');
         const voiceStop = document.getElementById('voiceStop');
-        const voiceProgress = document.getElementById('voiceProgress');
+        const voiceTrack = document.getElementById('voiceTrack');
+        const voiceTrackFill = document.getElementById('voiceTrackFill');
+        const voiceTrackThumb = document.getElementById('voiceTrackThumb');
+        const voiceCurrentTime = document.getElementById('voiceCurrentTime');
+        const voiceDurationTime = document.getElementById('voiceDurationTime');
         const voiceNote = document.getElementById('voiceNote');
 
         const MUSIC_VOLUME = 0.85;
-        const MUSIC_DUCKED_VOLUME = 0.35;
+        const MUSIC_DUCKED_VOLUME = 0.25;
         const VOICE_VOLUME = 0.90;
+
+        let isDraggingVoiceTrack = false;
 
         function formatTime(t) {
             if (!isFinite(t)) return '0:00';
@@ -1375,20 +1430,26 @@
             return `${m}:${s}`;
         }
 
-        function updateVoiceProgress() {
-            if (voiceNote.duration) {
-                voiceProgress.textContent = `${formatTime(voiceNote.currentTime)} / ${formatTime(voiceNote.duration)}`;
-            }
+        function updateVoiceTrackUI() {
+            const duration = voiceNote.duration || 0;
+            const ratio = duration ? Math.min(1, voiceNote.currentTime / duration) : 0;
+            voiceTrackFill.style.width = `${ratio * 100}%`;
+            voiceTrackThumb.style.left = `${ratio * 100}%`;
+            voiceCurrentTime.textContent = formatTime(voiceNote.currentTime);
+            voiceDurationTime.textContent = formatTime(duration);
         }
 
         function setPlayingUI(isPlaying) {
             voicePlayIcon.textContent = isPlaying ? '⏸' : '▶';
-            voicePlayLabel.textContent = isPlaying ? 'Reproduciendo...' : 'Escuchar Dedicatoria 💌';
+        }
+
+        function restoreMusicVolume() {
+            music.volume = MUSIC_VOLUME;
         }
 
         voicePlayPause.addEventListener('click', () => {
             if (voiceNote.paused) {
-                // Cada vez que se presiona play: la música baja a 35% y la nota sube a 90%
+                // Cada vez que se presiona play: la música baja a 25% y la nota sube a 90%
                 music.volume = MUSIC_DUCKED_VOLUME;
                 voiceNote.volume = VOICE_VOLUME;
                 voiceNote.play().then(() => {
@@ -1400,6 +1461,8 @@
             } else {
                 voiceNote.pause();
                 setPlayingUI(false);
+                // Al pausar, la música también vuelve a su volumen normal
+                restoreMusicVolume();
             }
         });
 
@@ -1407,33 +1470,54 @@
             voiceNote.pause();
             voiceNote.currentTime = 0;
             setPlayingUI(false);
-            updateVoiceProgress();
+            updateVoiceTrackUI();
             // Al detener, la música vuelve a su volumen normal
-            music.volume = MUSIC_VOLUME;
+            restoreMusicVolume();
         });
 
-        voiceRewind.addEventListener('click', () => {
-            voiceNote.currentTime = Math.max(0, voiceNote.currentTime - 5);
-            updateVoiceProgress();
+        voiceNote.addEventListener('timeupdate', () => {
+            if (!isDraggingVoiceTrack) updateVoiceTrackUI();
         });
-
-        voiceForward.addEventListener('click', () => {
-            if (voiceNote.duration) {
-                voiceNote.currentTime = Math.min(voiceNote.duration, voiceNote.currentTime + 5);
-            } else {
-                voiceNote.currentTime += 5;
-            }
-            updateVoiceProgress();
-        });
-
-        voiceNote.addEventListener('timeupdate', updateVoiceProgress);
-        voiceNote.addEventListener('loadedmetadata', updateVoiceProgress);
+        voiceNote.addEventListener('loadedmetadata', updateVoiceTrackUI);
 
         voiceNote.addEventListener('ended', () => {
             setPlayingUI(false);
             // Al terminar la nota de voz, la música regresa a su volumen normal
-            music.volume = MUSIC_VOLUME;
+            restoreMusicVolume();
         });
+
+        // --- Arrastrar/tocar la barra para adelantar o atrasar, como una nota de audio de WhatsApp ---
+        function seekFromClientX(clientX) {
+            const rect = voiceTrack.getBoundingClientRect();
+            const ratio = Math.min(1, Math.max(0, (clientX - rect.left) / rect.width));
+            const duration = voiceNote.duration || 0;
+            voiceTrackFill.style.width = `${ratio * 100}%`;
+            voiceTrackThumb.style.left = `${ratio * 100}%`;
+            voiceCurrentTime.textContent = formatTime(ratio * duration);
+            return ratio * duration;
+        }
+
+        function startDrag(clientX) {
+            isDraggingVoiceTrack = true;
+            seekFromClientX(clientX);
+        }
+        function moveDrag(clientX) {
+            if (isDraggingVoiceTrack) seekFromClientX(clientX);
+        }
+        function endDrag(clientX) {
+            if (!isDraggingVoiceTrack) return;
+            const newTime = seekFromClientX(clientX);
+            if (isFinite(newTime)) voiceNote.currentTime = newTime;
+            isDraggingVoiceTrack = false;
+        }
+
+        voiceTrack.addEventListener('mousedown', e => startDrag(e.clientX));
+        window.addEventListener('mousemove', e => moveDrag(e.clientX));
+        window.addEventListener('mouseup', e => endDrag(e.clientX));
+
+        voiceTrack.addEventListener('touchstart', e => startDrag(e.touches[0].clientX), { passive: true });
+        voiceTrack.addEventListener('touchmove', e => moveDrag(e.touches[0].clientX), { passive: true });
+        voiceTrack.addEventListener('touchend', e => endDrag(e.changedTouches[0].clientX));
 
         /* ---------- Mensaje si vuelve a abrir el álbum otro día ---------- */
         (function checkReturningVisit() {
