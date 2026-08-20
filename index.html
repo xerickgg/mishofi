@@ -524,9 +524,9 @@
             border: none;
             border-radius: 50px;
             color: white;
-            padding: 10px 20px;
+            padding: 10px 18px;
             font-family: 'Fredoka', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: 600;
             cursor: pointer;
             display: inline-flex;
@@ -534,11 +534,45 @@
             gap: 8px;
             box-shadow: 0 4px 14px rgba(230, 57, 70, 0.4);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
-            margin-top: 10px;
             outline: none;
         }
         .voice-btn:hover { transform: scale(1.05); box-shadow: 0 6px 18px rgba(230, 57, 70, 0.6); }
         .voice-btn:active { transform: scale(0.95); }
+
+        .voice-controls {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .voice-mini-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            border: 1px solid rgba(150, 110, 50, 0.3);
+            background: linear-gradient(135deg, var(--yellow), var(--coral));
+            color: #4a2a10;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.18);
+            transition: transform 0.2s ease;
+            outline: none;
+            flex-shrink: 0;
+        }
+        .voice-mini-btn:hover { transform: scale(1.1); }
+        .voice-mini-btn:active { transform: scale(0.9); }
+        .voice-mini-btn:disabled { opacity: 0.4; cursor: default; transform: none; }
+
+        .voice-progress {
+            font-size: 0.7rem;
+            color: #8a6a2f;
+            margin-top: 6px;
+            font-family: 'Poppins', sans-serif;
+        }
 
         h1 { font-family: 'Fredoka', sans-serif; font-size: 2.1rem; margin: 0 0 10px 0; font-weight: 700; text-shadow: 0 3px 12px rgba(85, 18, 45, 0.35); text-align: center; width: 100%; }
         h2 { font-family: 'Fredoka', sans-serif; font-size: 1.5rem; margin: 0 0 8px 0; font-weight: 600; text-align: center; width: 100%; }
@@ -812,9 +846,15 @@
                                 </div>
                                 <div class="polaroid-hint">toca la foto para voltearla</div>
                                 <!-- Botón para Nota de Voz -->
-                                <button class="voice-btn" id="voiceBtn">
-                                    <span>▶</span> Escuchar Dedicatoria 💌
-                                </button>
+                                <div class="voice-controls">
+                                    <button class="voice-mini-btn" id="voiceRewind" aria-label="Retroceder 5 segundos">⏪</button>
+                                    <button class="voice-btn" id="voicePlayPause">
+                                        <span id="voicePlayIcon">▶</span> <span id="voicePlayLabel">Escuchar Dedicatoria 💌</span>
+                                    </button>
+                                    <button class="voice-mini-btn" id="voiceForward" aria-label="Adelantar 5 segundos">⏩</button>
+                                    <button class="voice-mini-btn" id="voiceStop" aria-label="Detener">⏹</button>
+                                </div>
+                                <div class="voice-progress" id="voiceProgress"></div>
                                 <audio id="voiceNote" src="felicitacion.mp3"></audio>
                             </div>
 
@@ -1062,35 +1102,40 @@
                 if (ctx.state === 'suspended') ctx.resume();
                 const now = ctx.currentTime;
 
-                // Swoosh: ráfaga de ruido filtrada
-                const bufferSize = Math.floor(ctx.sampleRate * 0.22);
-                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
-                const noise = ctx.createBufferSource();
-                noise.buffer = buffer;
-                const noiseFilter = ctx.createBiquadFilter();
-                noiseFilter.type = 'bandpass';
-                noiseFilter.frequency.value = 1800;
-                noiseFilter.Q.value = 0.7;
-                const noiseGain = ctx.createGain();
-                noiseGain.gain.setValueAtTime(0.05, now);
-                noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
-                noise.connect(noiseFilter).connect(noiseGain).connect(ctx.destination);
-                noise.start(now);
+                // Genera una ráfaga de ruido "áspero" filtrada, como fricción de papel
+                function paperBurst(startOffset, duration, freqStart, freqEnd, peakGain, filterType, q) {
+                    const bufferSize = Math.max(1, Math.floor(ctx.sampleRate * duration));
+                    const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                    const data = buffer.getChannelData(0);
+                    for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
 
-                // Campanita suave
-                const bell = ctx.createOscillator();
-                bell.type = 'sine';
-                bell.frequency.setValueAtTime(1200, now);
-                bell.frequency.exponentialRampToValueAtTime(900, now + 0.2);
-                const bellGain = ctx.createGain();
-                bellGain.gain.setValueAtTime(0.0001, now);
-                bellGain.gain.linearRampToValueAtTime(0.045, now + 0.02);
-                bellGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
-                bell.connect(bellGain).connect(ctx.destination);
-                bell.start(now);
-                bell.stop(now + 0.4);
+                    const src = ctx.createBufferSource();
+                    src.buffer = buffer;
+
+                    const filter = ctx.createBiquadFilter();
+                    filter.type = filterType;
+                    filter.Q.value = q;
+                    filter.frequency.setValueAtTime(freqStart, now + startOffset);
+                    filter.frequency.exponentialRampToValueAtTime(freqEnd, now + startOffset + duration);
+
+                    const gain = ctx.createGain();
+                    gain.gain.setValueAtTime(0.0001, now + startOffset);
+                    gain.gain.linearRampToValueAtTime(peakGain, now + startOffset + duration * 0.18);
+                    gain.gain.exponentialRampToValueAtTime(0.0001, now + startOffset + duration);
+
+                    src.connect(filter).connect(gain).connect(ctx.destination);
+                    src.start(now + startOffset);
+                    src.stop(now + startOffset + duration + 0.02);
+                }
+
+                // Ráfaga principal: la hoja doblándose y deslizando
+                paperBurst(0,    0.17, 3400, 1500, 0.078, 'bandpass', 1.3);
+                // Crujidos cortos superpuestos, como la fricción/arrugue del papel
+                paperBurst(0.03, 0.05, 5400, 4200, 0.045, 'highpass', 4);
+                paperBurst(0.08, 0.045, 4800, 3400, 0.036, 'highpass', 4);
+                paperBurst(0.12, 0.04, 5000, 3800, 0.03, 'highpass', 3.5);
+                // Cola grave suave, el "asiento" de la página al caer
+                paperBurst(0.15, 0.1,  900,  400,  0.042, 'bandpass', 1.1);
             } catch (e) {
                 console.log('Audio de página no disponible:', e);
             }
@@ -1193,6 +1238,7 @@
         function startMusicAt(seconds) {
             const playFromHere = () => {
                 music.currentTime = seconds;
+                music.volume = 0.85;
                 music.play().catch(e => console.log("Error de audio: ", e));
             };
             if (music.readyState >= 1) playFromHere();
@@ -1309,29 +1355,84 @@
         }
 
         /* ---------- Control de Nota de Voz ---------- */
-        const voiceBtn = document.getElementById('voiceBtn');
+        const voicePlayPause = document.getElementById('voicePlayPause');
+        const voicePlayIcon = document.getElementById('voicePlayIcon');
+        const voicePlayLabel = document.getElementById('voicePlayLabel');
+        const voiceRewind = document.getElementById('voiceRewind');
+        const voiceForward = document.getElementById('voiceForward');
+        const voiceStop = document.getElementById('voiceStop');
+        const voiceProgress = document.getElementById('voiceProgress');
         const voiceNote = document.getElementById('voiceNote');
 
-        voiceBtn.addEventListener('click', () => {
+        const MUSIC_VOLUME = 0.85;
+        const MUSIC_DUCKED_VOLUME = 0.35;
+        const VOICE_VOLUME = 0.90;
+
+        function formatTime(t) {
+            if (!isFinite(t)) return '0:00';
+            const m = Math.floor(t / 60);
+            const s = Math.floor(t % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        function updateVoiceProgress() {
+            if (voiceNote.duration) {
+                voiceProgress.textContent = `${formatTime(voiceNote.currentTime)} / ${formatTime(voiceNote.duration)}`;
+            }
+        }
+
+        function setPlayingUI(isPlaying) {
+            voicePlayIcon.textContent = isPlaying ? '⏸' : '▶';
+            voicePlayLabel.textContent = isPlaying ? 'Reproduciendo...' : 'Escuchar Dedicatoria 💌';
+        }
+
+        voicePlayPause.addEventListener('click', () => {
             if (voiceNote.paused) {
-                music.volume = 0.3;
+                // Cada vez que se presiona play: la música baja a 35% y la nota sube a 90%
+                music.volume = MUSIC_DUCKED_VOLUME;
+                voiceNote.volume = VOICE_VOLUME;
                 voiceNote.play().then(() => {
-                    voiceBtn.innerHTML = '<span>⏸</span> Reproduciendo...';
+                    setPlayingUI(true);
                 }).catch(e => {
                     console.log("Error al reproducir audio de felicitación:", e);
                     alert("Asegúrate de agregar el archivo 'felicitacion.mp3' en la misma carpeta.");
                 });
             } else {
                 voiceNote.pause();
-                voiceNote.currentTime = 0;
-                voiceBtn.innerHTML = '<span>▶</span> Escuchar Dedicatoria 💌';
-                music.volume = 1.0;
+                setPlayingUI(false);
             }
         });
 
+        voiceStop.addEventListener('click', () => {
+            voiceNote.pause();
+            voiceNote.currentTime = 0;
+            setPlayingUI(false);
+            updateVoiceProgress();
+            // Al detener, la música vuelve a su volumen normal
+            music.volume = MUSIC_VOLUME;
+        });
+
+        voiceRewind.addEventListener('click', () => {
+            voiceNote.currentTime = Math.max(0, voiceNote.currentTime - 5);
+            updateVoiceProgress();
+        });
+
+        voiceForward.addEventListener('click', () => {
+            if (voiceNote.duration) {
+                voiceNote.currentTime = Math.min(voiceNote.duration, voiceNote.currentTime + 5);
+            } else {
+                voiceNote.currentTime += 5;
+            }
+            updateVoiceProgress();
+        });
+
+        voiceNote.addEventListener('timeupdate', updateVoiceProgress);
+        voiceNote.addEventListener('loadedmetadata', updateVoiceProgress);
+
         voiceNote.addEventListener('ended', () => {
-            voiceBtn.innerHTML = '<span>▶</span> Escuchar Dedicatoria 💌';
-            music.volume = 1.0;
+            setPlayingUI(false);
+            // Al terminar la nota de voz, la música regresa a su volumen normal
+            music.volume = MUSIC_VOLUME;
         });
 
         /* ---------- Mensaje si vuelve a abrir el álbum otro día ---------- */
