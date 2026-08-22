@@ -159,26 +159,21 @@
         /* ---------- Banderín de papel picado ---------- */
         .banderin {
             position: absolute;
-            top: 22px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: min(92vw, 460px);
-            height: 46px;
+            top: 18px;
+            left: 0;
+            width: 100vw;
+            height: 78px;
             z-index: 3;
             pointer-events: none;
         }
-        .banderin::before {
-            content: "";
+        .banderin-string {
             position: absolute;
-            top: 6px;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: rgba(255, 255, 255, 0.65);
+            inset: 0;
+            width: 100%;
+            height: 100%;
         }
         .flag {
             position: absolute;
-            top: 6px;
             width: 34px;
             height: 40px;
             clip-path: polygon(0 0, 100% 0, 50% 100%);
@@ -248,6 +243,23 @@
             border-radius: 27px;
             border: 2px dashed rgba(255, 255, 255, 0.6);
             pointer-events: none;
+        }
+        /* El marco festivo solo se ve cuando el álbum está cerrado (portada o contraportada) */
+        .album-frame:has(.album-viewport.double) {
+            padding: 0;
+            background: none;
+            box-shadow: none;
+        }
+        .album-frame:has(.album-viewport.double)::after {
+            content: none;
+        }
+        .album-frame.is-open {
+            padding: 0;
+            background: none;
+            box-shadow: none;
+        }
+        .album-frame.is-open::after {
+            content: none;
         }
 
         .mini-heart {
@@ -339,10 +351,15 @@
         }
 
         .face.cover-page {
-            background:
-                radial-gradient(circle at 30% 20%, rgba(255, 202, 58, 0.08), transparent 55%),
-                linear-gradient(160deg, #3a0e1f 0%, #591a34 45%, #26081a 100%);
-            border: 1px solid rgba(255, 202, 58, 0.45);
+            background-color: #a8541c;
+            background-image:
+                url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='260' height='260'><filter id='f'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.10 0'/></filter><rect width='100%25' height='100%25' filter='url(%23f)'/></svg>"),
+                radial-gradient(ellipse at 28% 18%, rgba(255, 224, 140, 0.28), transparent 55%),
+                radial-gradient(ellipse at 80% 100%, rgba(0, 0, 0, 0.22), transparent 60%),
+                linear-gradient(160deg, #b8641f 0%, #e6a53a 32%, #dd5a7a 62%, #7a1c38 100%);
+            background-size: 260px 260px, auto, auto, auto;
+            background-repeat: repeat, no-repeat, no-repeat, no-repeat;
+            border: 1px solid rgba(255, 210, 130, 0.4);
             color: var(--cream);
         }
         .face.cover-page h1 {
@@ -410,9 +427,16 @@
             pointer-events: none;
             opacity: 0.5;
         }
+        /* Marco propio de la portada/contraportada: doble línea dorada fina, sin punteado */
         .face.cover-page::before {
-            background: linear-gradient(135deg, var(--yellow), var(--pink), var(--red));
-            opacity: 0.85;
+            inset: 12px;
+            padding: 0;
+            border: 2px double rgba(255, 210, 110, 0.85);
+            border-radius: 6px;
+            background: none;
+            -webkit-mask: none;
+            mask: none;
+            opacity: 1;
         }
         
         @media (max-width: 600px) {
@@ -821,13 +845,30 @@
     <div class="ambient-confetti tri"    style="left:84%; --c:var(--pink);   animation-duration:9.5s; animation-delay:3s;"></div>
 
     <div class="banderin">
-        <div class="flag" style="left:0%; background:var(--yellow);"></div>
-        <div class="flag" style="left:16%; background:var(--pink);"></div>
-        <div class="flag" style="left:32%; background:var(--red);"></div>
-        <div class="flag" style="left:48%; background:var(--coral);"></div>
-        <div class="flag" style="left:64%; background:var(--yellow);"></div>
-        <div class="flag" style="left:80%; background:var(--pink);"></div>
-        <div class="flag" style="left:96%; background:var(--red);"></div>
+        <svg class="banderin-string" viewBox="0 0 100 78" preserveAspectRatio="none">
+            <path d="M0,5 Q16.6667,55 33.3333,5 Q50,55 66.6667,5 Q83.3333,55 100,5"
+                  fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="1" vector-effect="non-scaling-stroke"/>
+        </svg>
+        <!-- 4 puntos de agarre (0%, 33.33%, 66.67%, 100%) con 3 caídas iguales de 30px -->
+        <div class="flag" style="left:0%;     top:5px;  background:var(--yellow); transform:translateX(-50%);"></div>
+        <div class="flag" style="left:5.56%;  top:19px; background:var(--pink);   transform:translateX(-50%);"></div>
+        <div class="flag" style="left:11.11%; top:27px; background:var(--red);    transform:translateX(-50%);"></div>
+        <div class="flag" style="left:16.67%; top:30px; background:var(--coral);  transform:translateX(-50%);"></div>
+        <div class="flag" style="left:22.22%; top:27px; background:var(--yellow); transform:translateX(-50%);"></div>
+        <div class="flag" style="left:27.78%; top:19px; background:var(--pink);   transform:translateX(-50%);"></div>
+        <div class="flag" style="left:33.33%; top:5px;  background:var(--red);    transform:translateX(-50%);"></div>
+        <div class="flag" style="left:38.89%; top:19px; background:var(--coral);  transform:translateX(-50%);"></div>
+        <div class="flag" style="left:44.44%; top:27px; background:var(--yellow); transform:translateX(-50%);"></div>
+        <div class="flag" style="left:50%;    top:30px; background:var(--pink);   transform:translateX(-50%);"></div>
+        <div class="flag" style="left:55.56%; top:27px; background:var(--red);    transform:translateX(-50%);"></div>
+        <div class="flag" style="left:61.11%; top:19px; background:var(--coral);  transform:translateX(-50%);"></div>
+        <div class="flag" style="left:66.67%; top:5px;  background:var(--yellow); transform:translateX(-50%);"></div>
+        <div class="flag" style="left:72.22%; top:19px; background:var(--pink);   transform:translateX(-50%);"></div>
+        <div class="flag" style="left:77.78%; top:27px; background:var(--red);    transform:translateX(-50%);"></div>
+        <div class="flag" style="left:83.33%; top:30px; background:var(--coral);  transform:translateX(-50%);"></div>
+        <div class="flag" style="left:88.89%; top:27px; background:var(--yellow); transform:translateX(-50%);"></div>
+        <div class="flag" style="left:94.44%; top:19px; background:var(--pink);   transform:translateX(-50%);"></div>
+        <div class="flag" style="left:100%;   top:5px;  background:var(--red);    transform:translateX(-50%);"></div>
     </div>
 
     <!-- Contenedor del Álbum -->
@@ -1223,9 +1264,14 @@
         let fireworksTriggered = false;
         let navigationUnlocked = false;
 
+        const albumFrame = document.querySelector('.album-frame');
+
         function updateBook() {
             book.className = `book state-${currentState}`;
-            viewport.className = `album-viewport ${(currentState === 0 || currentState === MAX_STATE) ? 'single' : 'double'}`;
+            const isDouble = !(currentState === 0 || currentState === MAX_STATE);
+            viewport.className = `album-viewport ${isDouble ? 'double' : 'single'}`;
+            // Respaldo por JS para navegadores sin soporte de :has() (ej. WebView de WhatsApp)
+            albumFrame.classList.toggle('is-open', isDouble);
 
             if (currentState === 0) {
                 leaf1.classList.remove('flipped');
