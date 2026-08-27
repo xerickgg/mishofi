@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¡Feliz Cumpleaños! 🎂</title>
+    <title>Para Ana 🎂</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>">
 
     <!-- Vista previa para WhatsApp -->
     <meta property="og:title" content="¡Tengo una sorpresa para ti! 💖">
@@ -129,6 +130,18 @@
             pointer-events: none;
             animation: drift ease-in-out infinite alternate;
             transition: background 1.5s ease;
+        }
+        /* Al tener su propio transform, esta capa se vuelve el contenedor de referencia
+           de su mancha (position: fixed), permitiendo moverla con el mouse sin pelearse
+           con la animación de "drift" que ya tiene la mancha en sí. */
+        .parallax-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            transform: translate(0, 0);
+            transition: transform 0.25s ease-out;
+            will-change: transform;
         }
         @keyframes drift {
             0%   { transform: translate(0, 0) scale(1); }
@@ -702,6 +715,40 @@
         .b-string { position: absolute; top: calc(100% + 7px); left: 50%; width: 1px; height: 58px; background: rgba(255, 255, 255, 0.55); }
         @keyframes rise { 0% { transform: translateY(0) translateX(0) rotate(-4deg); opacity: 1; } 25% { transform: translateY(calc(var(--rise) * 0.25)) translateX(18px) rotate(4deg); } 50% { transform: translateY(calc(var(--rise) * 0.55)) translateX(-16px) rotate(-4deg); } 75% { transform: translateY(calc(var(--rise) * 0.85)) translateX(14px) rotate(3deg); } 100% { transform: translateY(var(--rise)) translateX(0) rotate(0deg); opacity: 1; } }
 
+        /* ---------- Pantalla de carga inicial ---------- */
+        #loadingScreen {
+            position: fixed;
+            inset: 0;
+            z-index: 3000;
+            background: linear-gradient(160deg, #4a0f2c 0%, #7a1e3d 48%, #3a0d22 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            transition: opacity 0.6s ease, visibility 0.6s ease;
+        }
+        #loadingScreen.hide {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        .loading-heart {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(155deg, var(--hot-pink) 0%, var(--red) 65%, #b51a32 100%);
+            clip-path: path('M50,30 C50,10 20,0 10,20 C0,40 15,55 50,85 C85,55 100,40 90,20 C80,0 50,10 50,30 Z');
+            animation: pulse 1.1s ease-in-out infinite;
+            box-shadow: 0 8px 22px rgba(230, 57, 70, 0.5);
+        }
+        .loading-text {
+            font-family: 'Fredoka', sans-serif;
+            color: var(--cream);
+            font-size: 1rem;
+            letter-spacing: 0.4px;
+            opacity: 0.9;
+        }
+
         /* ---------- Animación de sellar/abrir el sobre antes de la cartita ---------- */
         .envelope-overlay {
             position: fixed;
@@ -826,6 +873,12 @@
 </head>
 <body id="dynamicBody">
 
+    <!-- Pantalla de carga breve -->
+    <div id="loadingScreen">
+        <div class="loading-heart"></div>
+        <div class="loading-text">Preparando tu sorpresa...</div>
+    </div>
+
     <!-- Elementos del Cielo (Estrellas, Sol y Rayos) -->
     <div id="skyContainer"></div>
     <div class="sky-element" id="sun"></div>
@@ -833,10 +886,10 @@
     <div class="shooting-star" id="shootingStar"></div>
 
     <!-- Fondos animados -->
-    <div class="bg-blob" id="blob1" style="left:-10%; top:-8%;  width:60vw; height:60vw; background:var(--pink);   opacity:0.6; animation-duration:14s;"></div>
-    <div class="bg-blob" id="blob2" style="right:-15%; top:5%;  width:55vw; height:55vw; background:var(--yellow); opacity:0.4; animation-duration:17s;"></div>
-    <div class="bg-blob" id="blob3" style="left:5%; bottom:-15%; width:55vw; height:55vw; background:var(--red);    opacity:0.5; animation-duration:16s;"></div>
-    <div class="bg-blob" id="blob4" style="right:-10%; bottom:-12%; width:48vw; height:48vw; background:var(--coral);  opacity:0.5; animation-duration:19s;"></div>
+    <div class="parallax-layer" data-depth="0.02"><div class="bg-blob" id="blob1" style="left:-10%; top:-8%;  width:60vw; height:60vw; background:var(--pink);   opacity:0.6; animation-duration:14s;"></div></div>
+    <div class="parallax-layer" data-depth="0.035"><div class="bg-blob" id="blob2" style="right:-15%; top:5%;  width:55vw; height:55vw; background:var(--yellow); opacity:0.4; animation-duration:17s;"></div></div>
+    <div class="parallax-layer" data-depth="0.028"><div class="bg-blob" id="blob3" style="left:5%; bottom:-15%; width:55vw; height:55vw; background:var(--red);    opacity:0.5; animation-duration:16s;"></div></div>
+    <div class="parallax-layer" data-depth="0.045"><div class="bg-blob" id="blob4" style="right:-10%; bottom:-12%; width:48vw; height:48vw; background:var(--coral);  opacity:0.5; animation-duration:19s;"></div></div>
 
     <div class="ambient-confetti circle" style="left:8%;  width:8px; height:8px; background:var(--yellow); animation-duration:9s;  animation-delay:0s;"></div>
     <div class="ambient-confetti circle" style="left:18%; width:6px; height:6px; background:var(--pink);   animation-duration:11s; animation-delay:2s;"></div>
@@ -1172,7 +1225,37 @@
                 stars.forEach(s => s.style.opacity = '0.8');
             }
         }
+        /* ---------- Parallax sutil de las manchas de fondo con el mouse ---------- */
+        const parallaxLayers = document.querySelectorAll('.parallax-layer');
+        if (parallaxLayers.length && window.matchMedia('(hover: hover) and (pointer: fine)').matches) {
+            window.addEventListener('mousemove', e => {
+                const relX = (e.clientX / window.innerWidth) - 0.5;   // -0.5 a 0.5
+                const relY = (e.clientY / window.innerHeight) - 0.5;
+                parallaxLayers.forEach(layer => {
+                    const depth = parseFloat(layer.dataset.depth) || 0.02;
+                    const moveX = relX * depth * 1000;
+                    const moveY = relY * depth * 1000;
+                    layer.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                });
+            });
+        }
+
         applyTimeBasedTheme();
+
+        /* ---------- Ocultar la pantalla de carga cuando todo esté listo ---------- */
+        (function () {
+            const loadingScreen = document.getElementById('loadingScreen');
+            const minTime = new Promise(resolve => setTimeout(resolve, 600));
+            const pageLoaded = document.readyState === 'complete'
+                ? Promise.resolve()
+                : new Promise(resolve => window.addEventListener('load', resolve, { once: true }));
+            const fontsReady = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+
+            Promise.all([minTime, pageLoaded, fontsReady]).then(() => {
+                loadingScreen.classList.add('hide');
+                setTimeout(() => loadingScreen.remove(), 700);
+            });
+        })();
 
         /* ---------- Función de Fuegos Artificiales ---------- */
         function launchFireworks() {
