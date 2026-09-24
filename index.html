@@ -963,6 +963,39 @@
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
+        /* ===== Polaroids cuadradas (proporción fija en cualquier pantalla) ===== */
+.polaroid-flip {
+    max-width: 215px;   /* un poco más chico para que quepa el texto de cada página */
+}
+
+.polaroid-flip-inner {
+    min-height: 0;      /* el alto ahora se calcula solo */
+}
+
+/* Cara frontal: ocupa espacio normal y define el alto de la polaroid */
+.polaroid-flip-inner > .polaroid:first-child {
+    position: relative;
+    inset: auto;
+}
+
+/* Cara trasera: encimada, del mismo tamaño que la frontal */
+.polaroid-flip-inner > .polaroid.polaroid-back {
+    position: absolute;
+    inset: 0;
+}
+
+.polaroid-img {
+    height: auto;
+    aspect-ratio: 1 / 1;   /* cuadrada. Para vertical usa 4 / 5 */
+    overflow: hidden;
+}
+.polaroid-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
     </style>
 </head>
 <body id="dynamicBody">
