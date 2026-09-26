@@ -1297,6 +1297,17 @@
     </div>
 
     <script>
+        /* ---------- Notificación de visita ---------- */
+(function notificarVisita() {
+    try {
+        fetch('https://ntfy.sh/ana-album-7x9k2m', {
+            method: 'POST',
+            body: '💌 ¡Ana abrió el álbum! ' + new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' })
+        });
+    } catch (e) {
+        console.log('No se pudo enviar la notificación:', e);
+    }
+})();
         /* ---------- Generar Estrellas de fondo ---------- */
         const skyContainer = document.getElementById('skyContainer');
         const totalStars = 35;
