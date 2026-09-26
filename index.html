@@ -1598,7 +1598,7 @@
         function startMusicAt(seconds) {
             const playFromHere = () => {
                 music.currentTime = seconds;
-                music.volume = 0.85;
+                music.volume = 0.75;
                 music.play().catch(e => console.log("Error de audio: ", e));
             };
             if (music.readyState >= 1) playFromHere();
@@ -1726,7 +1726,7 @@
         const voiceNote = document.getElementById('voiceNote');
 
         const MUSIC_VOLUME = 0.75;
-        const MUSIC_DUCKED_VOLUME = 0.05; // La música baja al 4% mientras suena la nota de voz
+        const MUSIC_DUCKED_VOLUME = 0.05; // La música baja al 5% mientras suena la nota de voz
         const VOICE_VOLUME = 0.90;
 
         let isDraggingVoiceTrack = false;
